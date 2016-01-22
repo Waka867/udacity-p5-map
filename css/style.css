@@ -30,6 +30,11 @@ body {background-color: #CCC;}
     background-color: rgba(255,255,255,0.7);
 }
 
+.nytimes-articles {
+    background-color: white;
+    max-width: 75%;
+}
+
 .article-list {
     margin: 0;
     padding: 0;
