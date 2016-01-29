@@ -16,6 +16,10 @@ body {background-color: #CCC;}
     text-align: center;
 }
 
+.headline {
+    list-style: none;
+}
+
 .wikipedia-container {
     float:right;
     width:290px;
