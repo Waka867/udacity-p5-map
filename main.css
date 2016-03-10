@@ -1,0 +1,28 @@
+body {
+
+}
+
+.main-container {
+	background-color: #eee6f5;
+	max-width: 90%;
+	margin: 0 auto;
+	padding: 1%;
+    border: 1px darkgray solid;
+    border-radius: 15px;
+	box-shadow: 15px 2px 30px -2px darkgray;
+	margin: 2% auto;
+}
+
+#left-section {
+	/*float: left;*/
+	/*max-width: 45%;*/
+}
+
+#page-title {
+	text-align: center;
+}
+
+#right-section {
+	/*float: right;*/
+/*	max-width: 45%;*/
+}

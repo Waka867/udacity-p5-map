@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+	<!-- <script type="text/javascript" src="knockout-3.4.0.js"></script> -->
+	<script type="text/javascript" src="app.js"></script>
+</head>
+<body>
+	<h1 id="page-title">Neighborhood Map Helper</h1>
+	<div class="main-container">
+		<form id="left-section">
+			<h2>Please enter:</h2>
+			<input placeholder="City"></input>
+			<input placeholder="State"></input>
+			<input placeholder="ZIP"></input>
+		</form>
+		<div id="right-section">
+			<div data-bind="text: age"></div>
+		</div>
+	</div>
+	<div class="main-container">
+		<h3>Info</h3>
+		<div id="map"></div>
+	</div>
+
+<!-- 	<script src="knockout-3.4.0.js">
+
+	</script> -->
+</body>
+</html>
