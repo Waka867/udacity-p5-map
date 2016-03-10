@@ -13,13 +13,31 @@ body {
 	margin: 2% auto;
 }
 
+#bottomBar {
+	text-align: center;
+}
+
 #left-section {
 	/*float: left;*/
 	/*max-width: 45%;*/
 }
 
+#location-list {
+	display: inline-block;
+}
+
+#map {
+	background-color: red;
+	display: inline-block;
+	width: 70%;
+	height: 200px;
+	/*background-image: url(AFR_Logo2.jpg);*/
+}
+
 #page-title {
 	text-align: center;
+	font-family: sans-serif;
+/*	font-style: italic;*/
 }
 
 #right-section {
