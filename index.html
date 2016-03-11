@@ -4,11 +4,14 @@
 	<meta charset="UTF-8">
 	<title>Document</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 </head>
 <body>
+
 	<h1 id="page-title">Neighborhood Map Helper</h1>
-	<div class="main-container">
-		<div>
+	<div id="map">
+		<div class="main-container">
 			<form id="form-container">
 				<h2>Please enter:</h2>
 				<input placeholder="Address" id="address"></input>
@@ -67,27 +70,32 @@
 					<option value="WY">WY</option>
 				</select>
 				<input placeholder="ZIP" id="zip"></input>
-				<button id="submit-btn" data-bind="click: testFunction">Submit</button>
+				<button id="submit-btn" data-bind="click: testFunction, click: clickStuff">Submit</button>
 			</form>
+			<ul id="location-list">
+				<li id="" data-bind="">test</li>
+				<li id="" data-bind="">test</li>
+				<li id="" data-bind="">test</li>
+				<li id="" data-bind="">test</li>
+				<li id="" data-bind="">test</li>
+			</ul>
 		</div>
 	</div>
-	<div class="main-container">
-		<h3>Info</h3>
-		<div id="map">
-			<p>TEST</p>
-		</div>
-		<ul id="location-list">
-			<li id="" data-bind="">test</li>
-			<li id="" data-bind="">test</li>
-			<li id="" data-bind="">test</li>
-			<li id="" data-bind="">test</li>
-			<li id="" data-bind="">test</li>
-		</ul>
-	</div>
+
 	<div id="bottomBar">Udacity Web Project by | <a href="http://www.ledwinghernandez.com">Ledwing Hernandez</a></div>
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="knockout-3.4.0.js"></script>
-	<script type="text/javascript" src="app.js"></script>
+	<script>
+	  var map;
+	  function initMap() {
+	    map = new google.maps.Map(document.getElementById('map'), {
+	      center: {lat: 40.719656, lng: -74.000781},
+	      zoom: 18,
+	      draggable: false,
+	      noClear: true
+	    });
+	  }
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=initMap" onerror=""></script>
 </body>
 </html>
