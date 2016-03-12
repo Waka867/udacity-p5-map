@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
+	<title>Neighborhood Map - Udacity Project #5</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="app.js"></script>
@@ -70,7 +70,7 @@
 					<option value="WY">WY</option>
 				</select>
 				<input placeholder="ZIP" id="zip"></input>
-				<button id="submit-btn" data-bind="click: testFunction, click: clickStuff">Submit</button>
+				<button id="submit-btn" data-bind="click: clickStuff">Submit</button>
 			</form>
 			<ul id="location-list">
 				<li id="" data-bind="">test</li>
@@ -90,9 +90,11 @@
 	  function initMap() {
 	    map = new google.maps.Map(document.getElementById('map'), {
 	      center: {lat: 40.719656, lng: -74.000781},
-	      zoom: 18,
+	      zoom: 16,
 	      draggable: false,
-	      noClear: true
+	      noClear: true,
+	      scrollwheel: false,
+	      mapTypeControl: false
 	    });
 	  }
 	</script>

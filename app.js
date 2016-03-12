@@ -28,9 +28,7 @@ $(document).ready(function(){
 	var viewmodel = function() {
 
 		testFunction = function() {
-			console.log("chirp testFunction");
-			// console.log(model.address);
-			// map.append("<img src='AFR_Logo2.jpg'>");
+
 		};
 
 		mapFunction = function() {
