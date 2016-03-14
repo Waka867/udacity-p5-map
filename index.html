@@ -13,63 +13,10 @@
 	<div id="map">
 		<div class="main-container">
 			<form id="form-container">
-				<h2>Please enter:</h2>
-				<input placeholder="Address" id="address"></input>
-				<label for="state">State: </label>
-				<select name="state" id="state" size="1" value="">
-					<option value="AK">AK</option>
-					<option value="AL">AL</option>
-					<option value="AR">AR</option>
-					<option value="AZ">AZ</option>
-					<option value="CA">CA</option>
-					<option value="CO">CO</option>
-					<option value="CT">CT</option>
-					<option value="DC">DC</option>
-					<option value="DE">DE</option>
-					<option value="FL">FL</option>
-					<option value="GA">GA</option>
-					<option value="HI">HI</option>
-					<option value="IA">IA</option>
-					<option value="ID">ID</option>
-					<option value="IL">IL</option>
-					<option value="IN">IN</option>
-					<option value="KS">KS</option>
-					<option value="KY">KY</option>
-					<option value="LA">LA</option>
-					<option value="MA">MA</option>
-					<option value="MD">MD</option>
-					<option value="ME">ME</option>
-					<option value="MI">MI</option>
-					<option value="MN">MN</option>
-					<option value="MO">MO</option>
-					<option value="MS">MS</option>
-					<option value="MT">MT</option>
-					<option value="NC">NC</option>
-					<option value="ND">ND</option>
-					<option value="NE">NE</option>
-					<option value="NH">NH</option>
-					<option value="NJ">NJ</option>
-					<option value="NM">NM</option>
-					<option value="NV">NV</option>
-					<option value="NY">NY</option>
-					<option value="OH">OH</option>
-					<option value="OK">OK</option>
-					<option value="OR">OR</option>
-					<option value="PA">PA</option>
-					<option value="RI">RI</option>
-					<option value="SC">SC</option>
-					<option value="SD">SD</option>
-					<option value="TN">TN</option>
-					<option value="TX">TX</option>
-					<option value="UT">UT</option>
-					<option value="VA">VA</option>
-					<option value="VT">VT</option>
-					<option value="WA">WA</option>
-					<option value="WI">WI</option>
-					<option value="WV">WV</option>
-					<option value="WY">WY</option>
-				</select>
-				<input placeholder="ZIP" id="zip"></input>
+				<h2>Location Filter:</h2>
+				<input placeholder="Type here" id="address" type="text" size="35"></input>
+				<!-- <label for="state">State: </label> -->
+				<!-- <input placeholder="ZIP" id="zip"></input> -->
 				<button id="submit-btn" data-bind="click: clickStuff">Submit</button>
 			</form>
 			<ul id="location-list">
@@ -86,17 +33,37 @@
 
 	<script type="text/javascript" src="knockout-3.4.0.js"></script>
 	<script>
-	  var map;
-	  function initMap() {
-	    map = new google.maps.Map(document.getElementById('map'), {
-	      center: {lat: 40.719656, lng: -74.000781},
-	      zoom: 16,
-	      draggable: false,
-	      noClear: true,
-	      scrollwheel: false,
-	      mapTypeControl: false
-	    });
-	  }
+	 //  var map;
+	 //  function initMap() {
+	 //  	var mapCenter = {lat: 40.719656, lng: -74.000781};
+
+	 //    var map = new google.maps.Map(document.getElementById('map'), {
+		// 	center: mapCenter,
+		// 	zoom: 16,
+		// 	draggable: false,
+		// 	noClear: true,
+		// 	scrollwheel: false,
+		// 	mapTypeControl: false
+		// });
+
+		// var marker = new google.maps.Marker({
+		// 	position: mapCenter,
+		// 	map: map,
+		// 	title: "Location1",
+		// 	label: "Location #1",
+		// 	draggable: true
+		// });
+
+		// function toggleBounce() {
+		// 	if (marker.getAnimation() !== null) {
+		// 		marker.setAnimation(null);
+		// 	} else {
+		// 		marker.setAnimation(google.maps.Animation.BOUNCE);
+		// 	}
+		// };
+
+		// marker.addListener('click', toggleBounce);
+	 //  }; /* Remove script info on completion */
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=initMap" onerror=""></script>
 </body>
