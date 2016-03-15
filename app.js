@@ -1,22 +1,111 @@
-var map;
+/* -------------------------- App data model below ------------------------------ */
+var model = {
+	locations: [
+		{
+			name: "34 Howard Street",
+			position: {lat: 40.719656, lng: -74.000781}
+		},
+		{
+			name: "222 West Broadway",
+			position: {lat: 40.719196, lng: -74.006356}
+		},
+		{
+			name: "5 Crosby Street",
+			position: {lat: 40.719606, lng: -74.000221}
+		},
+		{
+			name: "59 Elizabeth Street",
+			position: {lat: 40.717253, lng: -73.996556}
+		},
+		{
+			name: "271 Church Street",
+			position: {lat: 40.718268, lng: -74.005223}
+		}
+	]
+};
+
+/* -------------------------- App View below ------------------------------------------------------------ */
+var view = function() {
+	this.listLoc1 = ko.observable(model.locations[0].name);
+	this.listLoc2 = ko.observable(model.locations[1].name);
+	this.listLoc3 = ko.observable(model.locations[2].name);
+	this.listLoc4 = ko.observable(model.locations[3].name);
+	this.listLoc5 = ko.observable(model.locations[4].name);
+};
+
+/* -------------------------- App Controller below ------------------------------------------------------ */
+var viewmodel = function() {
+
+	mapFunction = function() {
+		console.log("map function called");/* TEST FUNCTION ----------------     --------------    TEST FUNCTION */
+		mapArea.append();
+	};
+    // EXAMPLE.text("");
+    // clear out old data before new request
+};
+
+// var map; /* ------ I may need this, not sure yet */
+
+var mapPoint = model.locations[0].position;
+var mapPoint2 = model.locations[1].position;
+var mapPoint3 = model.locations[2].position;
+var mapPoint4 = model.locations[3].position;
+var mapPoint5 = model.locations[4].position;
+
+var mapPointname = model.locations[0].name;
+var mapPoint2name = model.locations[1].name;
+var mapPoint3name = model.locations[2].name;
+var mapPoint4name = model.locations[3].name;
+var mapPoint5name = model.locations[4].name;
+
 function initMap() {
-	var mapPoint = {lat: 40.719656, lng: -74.000781};
-	var mapPoint2 = {lat: 40.716432, lng: -74.000293};
 
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center: mapPoint,
 		zoom: 16,
-		draggable: false,
+		// draggable: false,
 		noClear: true,
-		scrollwheel: false,
+		// scrollwheel: false,
 		mapTypeControl: false
 	});
 
 	var marker = new google.maps.Marker({
 		position: mapPoint,
 		map: map,
-		title: "Location1",
-		label: "Location #1",
+		title: mapPointname,
+		// label: mapPointname,
+		draggable: true
+	});
+
+	var marker2 = new google.maps.Marker({
+		position: mapPoint2,
+		map: map,
+		title: mapPoint2name,
+		// label: mapPoint2name,
+		draggable: true
+	});
+
+	var marker3 = new google.maps.Marker({
+		position: mapPoint3,
+		map: map,
+		title: mapPoint3name,
+		// label: mapPoint3name,
+		draggable: true
+	});
+
+	var marker4 = new google.maps.Marker({
+		position: mapPoint4,
+		map: map,
+		title: mapPoint4name,
+		// label: mapPoint4name,
+		draggable: true
+	});
+
+	var marker5 = new google.maps.Marker({
+		position: mapPoint5,
+		map: map,
+		title: mapPoint5name,
+		// label: mapPoint5name,
 		draggable: true
 	});
 
@@ -28,8 +117,18 @@ function initMap() {
 		};
 	};
 
-	marker.addListener('click', toggleBounce);
+	var infobox = "<h1>" + mapPointname + "</h1>";
+
+	var infowindow = new google.maps.InfoWindow({
+		content: infobox
+	});
+
+	marker.addListener('click', function() {
+		infowindow.open(map, marker);
+		toggleBounce();
+	});
 };
+
 
 var body = $("body");
 var address = $("#address").val();
@@ -42,46 +141,17 @@ var mapUrl = "https://maps.googleapis.com/maps/api/js?size=1920x1080&location=14
 var svKey = "AIzaSyCAYhJSCo97R9osuDm5D82SHs0oEJSzbk8";
 var mapKey = "AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ";
 
-/* -------------------------- App data model below ------------------------------ */
-var model = {
-
-};
-
-/* -------------------------- App View below ------------------------------ */
-var view = {
-
-};
-
-/* -------------------------- App Controller below ------------------------------ */
-var viewmodel = function() {
-
-	testFunction = function() {
-	};
-
-	mapFunction = function() {
-		console.log("map function called");
-		mapArea.append();
-	};
-
-    // EXAMPLE.text("");
-    // clear out old data before new request
-
-    clickStuff = function() {
-		console.log("chirp submit button click");
-		// body.empty();
-		// map.append
-	};
-
-};
 
 $(document).ready(function(){
 
-	ko.applyBindings(viewmodel);
+	ko.applyBindings(view);
 
 	viewmodel();
 
+	view();
+
 	mapFunction();
 
-	console.log(mapUrl);
+	console.log(model.locations[2].position);/* TEST FUNCTION ----------------     --------------    TEST FUNCTION */
 
 });

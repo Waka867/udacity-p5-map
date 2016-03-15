@@ -25,13 +25,18 @@ body {
 	text-align: center;
 }
 
+#form-container {
+	display: inline-block;
+}
+
 #left-section {
 	/*float: left;*/
 	/*max-width: 45%;*/
 }
 
 #location-list {
-	display: none; /* change to inline-block */
+	display: inline-block;
+	font-size: 1.4em;
 }
 
 #map {
