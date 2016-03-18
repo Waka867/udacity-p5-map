@@ -5,26 +5,31 @@ var model = {
 			name: "34 Howard Street",
 			position: {lat: 40.719656, lng: -74.000781},
 			posName: "mapPoint",
+			infoContent: "<h1>34 Howard Street</h1>"
 		},
 		{
 			name: "222 West Broadway",
 			position: {lat: 40.719196, lng: -74.006356},
-			posName: "mapPoint2"
+			posName: "mapPoint2",
+			infoContent: "222 West Broadway"
 		},
 		{
 			name: "5 Crosby Street",
 			position: {lat: 40.719606, lng: -74.000221},
-			posName: "mapPoint3"
+			posName: "mapPoint3",
+			infoContent: "5 Crosby Street"
 		},
 		{
 			name: "59 Elizabeth Street",
 			position: {lat: 40.717253, lng: -73.996556},
-			posName: "mapPoint4"
+			posName: "mapPoint4",
+			infoContent: "59 Elizabeth Street"
 		},
 		{
 			name: "271 Church Street",
 			position: {lat: 40.718268, lng: -74.005223},
-			posName: "mapPoint5"
+			posName: "mapPoint5",
+			infoContent: "<h1>271 Church Street</h1>"
 		}
 	]
 };
@@ -36,20 +41,15 @@ var view = function() {
 	this.listLoc3 = ko.observable(model.locations[2].name);
 	this.listLoc4 = ko.observable(model.locations[3].name);
 	this.listLoc5 = ko.observable(model.locations[4].name);
-};
-
-/* -------------------------- App Controller below ------------------------------------------------------ */
-var viewmodel = function() {
 
 	mapFunction = function() {
 		console.log("map function called");/* TEST FUNCTION ----------------     --------------    TEST FUNCTION */
 		mapArea.append();
 	};
-    // EXAMPLE.text("");
-    // clear out old data before new request
 };
 
-// var map; /* ------ I may need this, not sure yet */
+/* -------------------------- App Controller below ------------------------------------------------------ */
+
 
 var mapPoint = model.locations[0].position;
 var mapPoint2 = model.locations[1].position;
@@ -63,12 +63,13 @@ var mapPoint3name = model.locations[2].name;
 var mapPoint4name = model.locations[3].name;
 var mapPoint5name = model.locations[4].name;
 
-var pointList = model.locations;
+// var pointList = model.locations;
 
-var i = i;
-// var loopMap = model.locations;
+var viewModel = function() {
 
-function initMap() {
+	var pointList = model.locations;
+
+	var self = this;
 
 	var map = new google.maps.Map(document.getElementById('map'), {
 		center: mapPoint,
@@ -79,50 +80,37 @@ function initMap() {
 		mapTypeControl: false
 	});
 
+	function toggleBounce() {
+		if (marker.getAnimation() !== null) {
+			marker.setAnimation(null);
+		} else {
+			marker.setAnimation(google.maps.Animation.BOUNCE);
+		};
+	};
+
+	var infowindow = new google.maps.InfoWindow();
+
 	for(i = 0; i < pointList.length; i++ ) {
 		marker = new google.maps.Marker({
 			position: pointList[i].position,
 			map: map,
 			title: pointList[i].name,
 			draggable: false,
+			info: pointList[i].infoContent,
 			animation: google.maps.Animation.DROP,
-			testMethod: function() {
-				addEventListener('click', console.log("test"))
-			}
 		});
 
-		function toggleBounce() {
-			if (marker.getAnimation() !== null) {
-				marker.setAnimation(null);
-			} else {
-				marker.setAnimation(google.maps.Animation.BOUNCE);
-			};
-		};
-
-		google.maps.event.addListener(marker, 'click', function(){
-			toggleBounce();
+		google.maps.event.addListener(marker, 'click', function () {
+			infowindow.setContent(marker.info);
+			// console.log(marker.title);
+			infowindow.open(map, this);
+			toggleBounce(marker);
 		});
-
-		var infobox = "<h1>" + pointList[i].name + "</h1>";
-
-		console.log(infobox); /* Test */
 	};
 
 	console.log(pointList); /* Test */
 	console.log(pointList[1].name); /* Test */
-
-	// marker.addListener('click', function() {
-	// 	InfoWindow.open(map, marker);
-	// 	toggleBounce();
-	// });
-
-	// var infowindow = new google.maps.InfoWindow({
-	// 	content: infobox
-	// });
-
-	// var infobox = "<h1>" + mapPointname + "</h1>";
 };
-
 
 // var body = $("body");
 // var address = $("#address").val();
@@ -135,15 +123,12 @@ var mapArea = $("#map");
 // var svKey = "AIzaSyCAYhJSCo97R9osuDm5D82SHs0oEJSzbk8";
 // var mapKey = "AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ";
 
+var errorFunc = function () {
+	mapArea.html("<h1>MAP HELPER COULD NOT LOAD.</h1>");
+};
 
 $(document).ready(function(){
 
 	ko.applyBindings(view);
-
-	viewmodel();
-
-	view();
-
-	mapFunction();
 
 });
