@@ -11,19 +11,19 @@ var model = {
 			name: "222 West Broadway",
 			position: {lat: 40.719196, lng: -74.006356},
 			posName: "mapPoint2",
-			infoContent: "222 West Broadway"
+			infoContent: "<h1>222 West Broadway</h1>"
 		},
 		{
 			name: "5 Crosby Street",
 			position: {lat: 40.719606, lng: -74.000221},
 			posName: "mapPoint3",
-			infoContent: "5 Crosby Street"
+			infoContent: "<h1>5 Crosby Street</h1>"
 		},
 		{
 			name: "59 Elizabeth Street",
 			position: {lat: 40.717253, lng: -73.996556},
 			posName: "mapPoint4",
-			infoContent: "59 Elizabeth Street"
+			infoContent: "<h1>59 Elizabeth Street</h1>"
 		},
 		{
 			name: "271 Church Street",
@@ -90,23 +90,30 @@ var viewModel = function() {
 
 	var infowindow = new google.maps.InfoWindow();
 
+	var markers = [];
+
 	for(i = 0; i < pointList.length; i++ ) {
-		marker = new google.maps.Marker({
+		markers[i] = new google.maps.Marker({
 			position: pointList[i].position,
 			map: map,
 			title: pointList[i].name,
 			draggable: false,
 			info: pointList[i].infoContent,
 			animation: google.maps.Animation.DROP,
+			// test: console.log(google.maps.Marker)
 		});
 
-		google.maps.event.addListener(marker, 'click', function () {
-			infowindow.setContent(marker.info);
-			// console.log(marker.title);
+		google.maps.event.addListener(markers[i], 'click', function () {
+			console.log("Test log in for loop event listener"); /* test */
+			infowindow.setContent(this.info);
 			infowindow.open(map, this);
-			toggleBounce(marker);
+			// toggleBounce(markers[i]);
 		});
+
+		console.log(markers[i].title);
 	};
+
+	console.log("Now logging: " + markers[3].title);
 
 	console.log(pointList); /* Test */
 	console.log(pointList[1].name); /* Test */
@@ -124,7 +131,7 @@ var mapArea = $("#map");
 // var mapKey = "AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ";
 
 var errorFunc = function () {
-	mapArea.html("<h1>MAP HELPER COULD NOT LOAD.</h1>");
+	alert("Neighborhood MAP HELPER COULD NOT LOAD.");
 };
 
 $(document).ready(function(){
