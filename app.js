@@ -1,35 +1,37 @@
 /* -------------------------- App data model below ------------------------------ */
 var model = {
+	clientId: "RS2OHMJ3OBNBCLAXXX0BZCPSQ4P2N3ZFVJ2YW1ZUUYBL5WPC",
+	clientSecret: "R3PRHQAUQZ4H5WADS5SL03PNUSN4DQOXEDZ01H5L2EP1PY5E",
 	locations: [
 		{
 			name: "34 Howard Street",
 			position: {lat: 40.719656, lng: -74.000781},
 			posName: "mapPoint",
-			infoContent: "<h1>34 Howard Street</h1>"
+			infoContent: "<h1>34 Howard Street</h1><p class='wikiStuff'></p>"
 		},
 		{
 			name: "222 West Broadway",
 			position: {lat: 40.719196, lng: -74.006356},
 			posName: "mapPoint2",
-			infoContent: "<h1>222 West Broadway</h1>"
+			infoContent: "<h1>222 West Broadway</h1><p class='wikiStuff'></p>"
 		},
 		{
 			name: "5 Crosby Street",
 			position: {lat: 40.719606, lng: -74.000221},
 			posName: "mapPoint3",
-			infoContent: "<h1>5 Crosby Street</h1>"
+			infoContent: "<h1>5 Crosby Street</h1><p class='wikiStuff'></p>"
 		},
 		{
 			name: "59 Elizabeth Street",
 			position: {lat: 40.717253, lng: -73.996556},
 			posName: "mapPoint4",
-			infoContent: "<h1>59 Elizabeth Street</h1>"
+			infoContent: "<h1>59 Elizabeth Street</h1><p class='wikiStuff'></p>"
 		},
 		{
 			name: "271 Church Street",
 			position: {lat: 40.718268, lng: -74.005223},
 			posName: "mapPoint5",
-			infoContent: "<h1>271 Church Street</h1>"
+			infoContent: "<h1>271 Church Street</h1><p class='wikiStuff'></p>"
 		}
 	]
 };
@@ -80,17 +82,10 @@ var viewModel = function() {
 		mapTypeControl: false
 	});
 
-	function toggleBounce() {
-		if (marker.getAnimation() !== null) {
-			marker.setAnimation(null);
-		} else {
-			marker.setAnimation(google.maps.Animation.BOUNCE);
-		};
-	};
-
 	var infowindow = new google.maps.InfoWindow();
 
 	var markers = [];
+	var wikiInfo = [];
 
 	for(i = 0; i < pointList.length; i++ ) {
 		markers[i] = new google.maps.Marker({
@@ -100,33 +95,73 @@ var viewModel = function() {
 			draggable: false,
 			info: pointList[i].infoContent,
 			animation: google.maps.Animation.DROP,
-			// test: console.log(google.maps.Marker)
 		});
+
+		var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=query&titles=' + markers[i].title + '&prop=revisions&rvprop=content&format=json';
+
+		console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
 
 		google.maps.event.addListener(markers[i], 'click', function () {
-			console.log("Test log in for loop event listener"); /* test */
+			console.log("Click successful on " + this.title); /* test */
 			infowindow.setContent(this.info);
 			infowindow.open(map, this);
-			// toggleBounce(markers[i]);
+			// toggleBounce();
+			// -------------------------------------------------------
+			var ajax = $.ajax({
+				url: wikiUrl,
+				dataType: "jsonp",
+				headers: { 'Api-User-Agent': 'Example/1.0' }
+			}).done(function(response) {
+				console.log(response);
+				// var articleList = response;
+				// var wLength = articleList.length;
+				// console.log(wikiUrl);
+			// for (var i = 0; i < wLength; i++) {
+			// };
+			});
 		});
 
-		console.log(markers[i].title);
+
+		// function toggleBounce() {
+		// 	console.log(m.animation);
+		// 	if (m.getAnimation() !== null) {
+		// 		m.setAnimation(null);
+		// 	} else {
+		// 		m.setAnimation(google.maps.Animation.BOUNCE);
+		// 	};
+		// };
+
+	// console.log(wikiUrl);
+
 	};
 
-	console.log("Now logging: " + markers[3].title);
+	// var ajax = $.ajax({
+	// 	url: wikiUrl,
+	// 	dataType: "jsonp",
+	// 	headers: { 'Api-User-Agent': 'Example/1.0' }
+	// }).done(function(response) {
+	// 	var articleList = response;
+	// 	var wLength = articleList.length;
+	// 	console.log(response);
+	// 	for (var i = 0; i < wLength; i++) {
+	// 		articleStr = articleList[i];
+	// 		var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+	// 		// $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li><br>');
+	// 	};
+	// 	// clearTimeout(wikiErrorTimeout);
+	// });
 
-	console.log(pointList); /* Test */
-	console.log(pointList[1].name); /* Test */
+	// for (var i = 0; i < wLength; i++) {
+	// 	articleStr = articleList[i];
+	// 	var url = 'http://en.wikipedia.org/wiki/' + articleStr;
+	// 	$wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li><br>');
+	// };
+	// 	clearTimeout(wikiErrorTimeout);
+	// });
+	// return false;
 };
 
-// var body = $("body");
-// var address = $("#address").val();
-// var zip = $("#zip").val();
-// var state = $("#state").val();
 var mapArea = $("#map");
-// var locationList = $("#location-list");
-// var formContainer = $("#form-container");
-// var mapUrl = "https://maps.googleapis.com/maps/api/js?size=1920x1080&location=14612&pitch=45&key=AIzaSyCAYhJSCo97R9osuDm5D82SHs0oEJSzbk8";
 // var svKey = "AIzaSyCAYhJSCo97R9osuDm5D82SHs0oEJSzbk8";
 // var mapKey = "AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ";
 
