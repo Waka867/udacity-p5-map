@@ -1,40 +1,45 @@
 /* -------------------------- App data model below ------------------------------ */
+var clientId = "RS2OHMJ3OBNBCLAXXX0BZCPSQ4P2N3ZFVJ2YW1ZUUYBL5WPC";
+var	clientSecret = "R3PRHQAUQZ4H5WADS5SL03PNUSN4DQOXEDZ01H5L2EP1PY5E";
+var urlCombo = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130806&ll=" + this.position + this.position + "&query=" + this.title;
+
 var model = {
-	clientId: "RS2OHMJ3OBNBCLAXXX0BZCPSQ4P2N3ZFVJ2YW1ZUUYBL5WPC",
-	clientSecret: "R3PRHQAUQZ4H5WADS5SL03PNUSN4DQOXEDZ01H5L2EP1PY5E",
 	locations: [
 		{
-			name: "34 Howard Street",
-			position: {lat: 40.719656, lng: -74.000781},
+			name: "Foot Locker",
+			position: {lat: 40.719849, lng: -74.000165},
 			posName: "mapPoint",
-			infoContent: "<h1>34 Howard Street</h1><p class='wikiStuff'></p>"
+			infoUrl: urlCombo,
+			infoContent: "<h1>440 Broadway</h1><p class='wikiStuff'></p>"
 		},
 		{
-			name: "222 West Broadway",
-			position: {lat: 40.719196, lng: -74.006356},
+			name: "Verizon",
+			position: {lat: 40.719441, lng: -74.000855},
 			posName: "mapPoint2",
-			infoContent: "<h1>222 West Broadway</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>277 Canal St</h1><p class='Stuff'></p>"
 		},
 		{
-			name: "5 Crosby Street",
-			position: {lat: 40.719606, lng: -74.000221},
+			name: "Joey Pepperonis Pizza",
+			position: {lat: 40.718517, lng: -74.003353},
 			posName: "mapPoint3",
-			infoContent: "<h1>5 Crosby Street</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>381 Broadway</h1><p class='Stuff'></p>"
 		},
 		{
-			name: "59 Elizabeth Street",
-			position: {lat: 40.717253, lng: -73.996556},
+			name: "Tone Academy of Music",
+			position: {lat: 40.718193, lng: -73.998766},
 			posName: "mapPoint4",
-			infoContent: "<h1>59 Elizabeth Street</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>118-122 Baxter St #403</h1><p class='Stuff'></p>"
 		},
 		{
-			name: "271 Church Street",
-			position: {lat: 40.718268, lng: -74.005223},
+			name: "Blue Man Group Productions",
+			position: {lat: 40.718811, lng: -74.001983},
 			posName: "mapPoint5",
-			infoContent: "<h1>271 Church Street</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>412 Broadway</h1><p class='Stuff'></p>"
 		}
 	]
 };
+
+	// console.log(clientId + clientSecret);
 
 /* -------------------------- App View below ------------------------------------------------------------ */
 var view = function() {
@@ -51,7 +56,6 @@ var view = function() {
 };
 
 /* -------------------------- App Controller below ------------------------------------------------------ */
-
 
 var mapPoint = model.locations[0].position;
 var mapPoint2 = model.locations[1].position;
@@ -85,7 +89,7 @@ var viewModel = function() {
 	var infowindow = new google.maps.InfoWindow();
 
 	var markers = [];
-	var wikiInfo = [];
+	var addyInfo = [];
 
 	for(i = 0; i < pointList.length; i++ ) {
 		markers[i] = new google.maps.Marker({
@@ -97,30 +101,24 @@ var viewModel = function() {
 			animation: google.maps.Animation.DROP,
 		});
 
-		var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=query&titles=' + markers[i].title + '&prop=revisions&rvprop=content&format=json';
-
 		console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
 
 		google.maps.event.addListener(markers[i], 'click', function () {
 			console.log("Click successful on " + this.title); /* test */
+			var ajax = $.ajax({
+				// crossDomain: true,
+				url: urlCombo,
+				headers: { 'Api-User-Agent': 'Example/1.0' },
+				dataType: "jsonp",
+				// error:
+				jsonpCallback:"",
+				test: console.log(this.title), /* TEST to make sure correct marker instance is being referred to by this */
+				posi: console.log(this.position) /* logs an object with lat and lng methods, however these should just show the valules rather than be methods */
+			})
 			infowindow.setContent(this.info);
 			infowindow.open(map, this);
 			// toggleBounce();
-			// -------------------------------------------------------
-			var ajax = $.ajax({
-				url: wikiUrl,
-				dataType: "jsonp",
-				headers: { 'Api-User-Agent': 'Example/1.0' }
-			}).done(function(response) {
-				console.log(response);
-				// var articleList = response;
-				// var wLength = articleList.length;
-				// console.log(wikiUrl);
-			// for (var i = 0; i < wLength; i++) {
-			// };
-			});
 		});
-
 
 		// function toggleBounce() {
 		// 	console.log(m.animation);
@@ -130,40 +128,10 @@ var viewModel = function() {
 		// 		m.setAnimation(google.maps.Animation.BOUNCE);
 		// 	};
 		// };
-
-	// console.log(wikiUrl);
-
 	};
-
-	// var ajax = $.ajax({
-	// 	url: wikiUrl,
-	// 	dataType: "jsonp",
-	// 	headers: { 'Api-User-Agent': 'Example/1.0' }
-	// }).done(function(response) {
-	// 	var articleList = response;
-	// 	var wLength = articleList.length;
-	// 	console.log(response);
-	// 	for (var i = 0; i < wLength; i++) {
-	// 		articleStr = articleList[i];
-	// 		var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-	// 		// $wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li><br>');
-	// 	};
-	// 	// clearTimeout(wikiErrorTimeout);
-	// });
-
-	// for (var i = 0; i < wLength; i++) {
-	// 	articleStr = articleList[i];
-	// 	var url = 'http://en.wikipedia.org/wiki/' + articleStr;
-	// 	$wikiElem.append('<li><a href="' + url + '">' + articleStr + '</a></li><br>');
-	// };
-	// 	clearTimeout(wikiErrorTimeout);
-	// });
-	// return false;
 };
 
 var mapArea = $("#map");
-// var svKey = "AIzaSyCAYhJSCo97R9osuDm5D82SHs0oEJSzbk8";
-// var mapKey = "AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ";
 
 var errorFunc = function () {
 	alert("Neighborhood MAP HELPER COULD NOT LOAD.");
