@@ -13,7 +13,7 @@ var model = {
 			infoContent: "<h1>440 Broadway</h1><p class='wikiStuff'></p>"
 		},
 		{
-			name: "Verizon",
+			name: "Verizon store",
 			position: {lat: 40.719441, lng: -74.000855},
 			posName: "mapPoint2",
 			infoContent: "<h1>277 Canal St</h1><p class='Stuff'></p>"
@@ -39,21 +39,26 @@ var model = {
 	]
 };
 
-	// console.log(clientId + clientSecret);
+var locArray = model.locations;
 
 /* -------------------------- App View below ------------------------------------------------------------ */
 var view = function() {
-	this.listLoc1 = ko.observable(model.locations[0].name);
-	this.listLoc2 = ko.observable(model.locations[1].name);
-	this.listLoc3 = ko.observable(model.locations[2].name);
-	this.listLoc4 = ko.observable(model.locations[3].name);
-	this.listLoc5 = ko.observable(model.locations[4].name);
 
-	mapFunction = function() {
-		console.log("map function called");/* TEST FUNCTION ----------------     --------------    TEST FUNCTION */
-		mapArea.append();
-	};
+	var locArray = ko.observableArray(locArray);
+	// var query = ko.observable('');
+
+	// var search = function(value) {
+	// 	view.locArray.removeAll();
+
+	// 	for(x in locArray) {
+	// 		if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+	// 			view.locArray.push(locArray[x]);
+	// 		}
+	// 	}
+	// }
+
 };
+
 
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
@@ -63,13 +68,6 @@ var mapPoint3 = model.locations[2].position;
 var mapPoint4 = model.locations[3].position;
 var mapPoint5 = model.locations[4].position;
 
-var mapPointname = model.locations[0].name;
-var mapPoint2name = model.locations[1].name;
-var mapPoint3name = model.locations[2].name;
-var mapPoint4name = model.locations[3].name;
-var mapPoint5name = model.locations[4].name;
-
-// var pointList = model.locations;
 
 var viewModel = function() {
 
@@ -120,6 +118,9 @@ var viewModel = function() {
 			// toggleBounce();
 		});
 
+		var search = function() {
+
+		};
 		// function toggleBounce() {
 		// 	console.log(m.animation);
 		// 	if (m.getAnimation() !== null) {
@@ -131,11 +132,12 @@ var viewModel = function() {
 	};
 };
 
-var mapArea = $("#map");
+// var mapArea = $("#map");
 
 var errorFunc = function () {
 	alert("Neighborhood MAP HELPER COULD NOT LOAD.");
 };
+
 
 $(document).ready(function(){
 
