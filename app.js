@@ -41,24 +41,33 @@ var model = {
 
 var locArray = model.locations;
 
+
 /* -------------------------- App View below ------------------------------------------------------------ */
 var view = function() {
 
 	var locArray = ko.observableArray(locArray);
-	// var query = ko.observable('');
+	var query = ko.observable('');
 
-	// var search = function(value) {
-	// 	view.locArray.removeAll();
+	console.log("View initialized");
 
-	// 	for(x in locArray) {
-	// 		if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-	// 			view.locArray.push(locArray[x]);
-	// 		}
-	// 	}
-	// }
+	var search = function(value) {
+		view.locArray.removeAll(); // list removal
 
+		for(x in locArray) {
+			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+				view.locArray.push(locArray[x]);
+			}
+		}
+	}
 };
 
+var viewer = {
+	test: "This is a test",
+	// query: ko.observable(''),
+	// alloy: ko.observable("alloy")
+};
+
+// view.query.subscribe(view);
 
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
@@ -70,8 +79,6 @@ var mapPoint5 = model.locations[4].position;
 
 
 var viewModel = function() {
-
-	var pointList = model.locations;
 
 	var self = this;
 
@@ -87,15 +94,16 @@ var viewModel = function() {
 	var infowindow = new google.maps.InfoWindow();
 
 	var markers = [];
+
 	var addyInfo = [];
 
-	for(i = 0; i < pointList.length; i++ ) {
+	for(i = 0; i < locArray.length; i++ ) {
 		markers[i] = new google.maps.Marker({
-			position: pointList[i].position,
+			position: locArray[i].position,
 			map: map,
-			title: pointList[i].name,
+			title: locArray[i].name,
 			draggable: false,
-			info: pointList[i].infoContent,
+			info: locArray[i].infoContent,
 			animation: google.maps.Animation.DROP,
 		});
 
@@ -118,9 +126,6 @@ var viewModel = function() {
 			// toggleBounce();
 		});
 
-		var search = function() {
-
-		};
 		// function toggleBounce() {
 		// 	console.log(m.animation);
 		// 	if (m.getAnimation() !== null) {
@@ -132,15 +137,12 @@ var viewModel = function() {
 	};
 };
 
-// var mapArea = $("#map");
-
 var errorFunc = function () {
 	alert("Neighborhood MAP HELPER COULD NOT LOAD.");
 };
 
-
 $(document).ready(function(){
-
-	ko.applyBindings(view);
-
+// 	// ko.applyBindings(viewer);
+	ko.applyBindings(viewModel);
+	view();/* Initializes view variables and methods*/
 });
