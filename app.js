@@ -41,30 +41,28 @@ var model = {
 
 var locArray = model.locations;
 
+var starter = function() {
+	console.log("self deploying function test"); /* self deploying function test */
+}();
+
 
 /* -------------------------- App View below ------------------------------------------------------------ */
 var view = function() {
 
-	var locArray = ko.observableArray(locArray);
-	var query = ko.observable('');
+	// var locArray = ko.observableArray(locArray);
+	// var query = ko.observable('');
 
 	console.log("View initialized");
 
-	var search = function(value) {
-		view.locArray.removeAll(); // list removal
+	// var search = function(value) {
+	// 	view.locArray.removeAll(); // list removal
 
-		for(x in locArray) {
-			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-				view.locArray.push(locArray[x]);
-			}
-		}
-	}
-};
-
-var viewer = {
-	test: "This is a test",
-	// query: ko.observable(''),
-	// alloy: ko.observable("alloy")
+	// 	for(x in locArray) {
+	// 		if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+	// 			view.locArray.push(locArray[x]);
+	// 		}
+	// 	}
+	// }
 };
 
 // view.query.subscribe(view);
@@ -78,53 +76,79 @@ var mapPoint4 = model.locations[3].position;
 var mapPoint5 = model.locations[4].position;
 
 
-var viewModel = function() {
+var viewModel = {
 
-	var self = this;
+	self: this,
 
-	var map = new google.maps.Map(document.getElementById('map'), {
-		center: mapPoint,
-		zoom: 16,
-		// draggable: false,
-		noClear: true,
-		// scrollwheel: false,
-		mapTypeControl: false
-	});
+	test: function() {
+		console.log("test")
+	}(), /* test */
 
-	var infowindow = new google.maps.InfoWindow();
+	map: function() {
+		new google.maps.Map(document.getElementById('map'), {
+			center: mapPoint,
+			zoom: 16,
+			// draggable: false,
+			noClear: true,
+			// scrollwheel: false,
+			mapTypeControl: false
+		})
+	},
 
-	var markers = [];
+	infowindow: function() {
+		new google.maps.InfoWindow();
+	},
 
-	var addyInfo = [];
+	markers: [],
 
-	for(i = 0; i < locArray.length; i++ ) {
-		markers[i] = new google.maps.Marker({
-			position: locArray[i].position,
-			map: map,
-			title: locArray[i].name,
-			draggable: false,
-			info: locArray[i].infoContent,
-			animation: google.maps.Animation.DROP,
-		});
+	addyInfo: [],
 
-		console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
+	locArray: function() {
+		ko.observableArray(locArray)
+	},
+	// var query = ko.observable('');
 
-		google.maps.event.addListener(markers[i], 'click', function () {
-			console.log("Click successful on " + this.title); /* test */
-			var ajax = $.ajax({
-				// crossDomain: true,
-				url: urlCombo,
-				headers: { 'Api-User-Agent': 'Example/1.0' },
-				dataType: "jsonp",
-				// error:
-				jsonpCallback:"",
-				test: console.log(this.title), /* TEST to make sure correct marker instance is being referred to by this */
-				posi: console.log(this.position) /* logs an object with lat and lng methods, however these should just show the valules rather than be methods */
-			})
-			infowindow.setContent(this.info);
-			infowindow.open(map, this);
-			// toggleBounce();
-		});
+
+	markerMaker: function(){
+		for(i = 0; i < locArray.length; i++ ) {
+			self.markers[i] = new google.maps.Marker({
+				position: locArray[i].position,
+				map: map,
+				title: locArray[i].name,
+				draggable: false,
+				info: locArray[i].infoContent,
+				animation: google.maps.Animation.DROP,
+			});
+
+			console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
+
+			google.maps.event.addListener(markers[i], 'click', function () {
+				console.log("Click successful on " + this.title); /* test */
+				var ajax = $.ajax({
+					// crossDomain: true,
+					url: urlCombo,
+					headers: { 'Api-User-Agent': 'Example/1.0' },
+					dataType: "jsonp",
+					// error:
+					jsonpCallback:"",
+					test: console.log(this.title), /* TEST to make sure correct marker instance is being referred to by this */
+					posi: console.log(this.position) /* logs an object with lat and lng methods, however these should just show the valules rather than be methods */
+				})
+				infowindow.setContent(this.info);
+				infowindow.open(map, this);
+				// toggleBounce();
+			});
+		};
+
+		var search = function(value) {
+			view.locArray.removeAll(); // list removal
+
+			for(x in locArray) {
+				if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+					view.locArray.push(locArray[x]);
+				}
+			}
+		};
 
 		// function toggleBounce() {
 		// 	console.log(m.animation);
@@ -134,7 +158,7 @@ var viewModel = function() {
 		// 		m.setAnimation(google.maps.Animation.BOUNCE);
 		// 	};
 		// };
-	};
+	},
 };
 
 var errorFunc = function () {
@@ -144,5 +168,6 @@ var errorFunc = function () {
 $(document).ready(function(){
 // 	// ko.applyBindings(viewer);
 	ko.applyBindings(viewModel);
-	view();/* Initializes view variables and methods*/
+	// viewModel.markerMaker();
+	// view();/* Initializes view variables and methods*/
 });
