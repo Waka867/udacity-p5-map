@@ -41,6 +41,9 @@ var model = {
 
 /* -------------------------- App View below ------------------------------------------------------------ */
 var view = {
+	GMerrorhandler: function() {
+		alert("Google Maps service encountered a problem and could not load");
+	},
 
 	// var locArray = ko.observableArray(locArray);
 	// var query = ko.observable('');
@@ -62,12 +65,13 @@ var view = {
 
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
-
 var markers = [];
 
 var addyInfo = [];
 
 var locArray = model.locations;
+
+var infowindow;
 
 var viewModel = {
 
@@ -76,7 +80,6 @@ var viewModel = {
 	// var query = ko.observable('');
 
 	markerMaker: function(){
-
 		for(i = 0; i < locArray.length; i++ ) {
 			markers[i] = new google.maps.Marker({
 				position: locArray[i].position,
@@ -87,28 +90,31 @@ var viewModel = {
 				animation: google.maps.Animation.DROP,
 			});
 
-			infowindow = function() {
-				new google.maps.InfoWindow();
-			};
-
 			console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
 			console.log(locArray[i].position); /* Correct */
 
+			var toggleBounce = function(m) {
+				if (m.getAnimation() !== null) {
+					m.setAnimation(null);
+				} else {
+					m.setAnimation(google.maps.Animation.BOUNCE);
+				};
+				setTimeout(function(){
+					m.setAnimation(null); /* Limits how long a marker will bounce for when clicked */
+				}, 700)
+			};
+
 			google.maps.event.addListener(markers[i], 'click', function () {
-				console.log("Click successful on " + this.title); /* test */
-				// var ajax = $.ajax({
-				// 	// crossDomain: true,
-				// 	url: urlCombo,
-				// 	headers: { 'Api-User-Agent': 'Example/1.0' },
-				// 	dataType: "jsonp",
-				// 	// error:
-				// 	jsonpCallback:"",
-				// 	test: console.log(this.title),  TEST to make sure correct marker instance is being referred to by this
-				// 	posi: console.log(this.position) /* logs an object with lat and lng methods, however these should just show the valules rather than be methods */
-				// })
-				// infowindow.setContent(this.info);
-				// infowindow.open(map, this);
 				toggleBounce(this);
+				if(!infowindow) {
+					infowindow = new google.maps.InfoWindow({
+						// content: "TEST",
+					});
+				};
+				infowindow.setContent(this.info);
+				infowindow.open(map, this);
+				// console.log(this.info);
+				// console.log(infowindow);
 			});
 		};
 
@@ -121,20 +127,12 @@ var viewModel = {
 		// 		}
 		// 	}
 		// };
-
-		function toggleBounce(m) {
-			if (m.getAnimation() !== null) {
-				m.setAnimation(null);
-			} else {
-				m.setAnimation(google.maps.Animation.BOUNCE);
-			};
-		};
 	},
 };
 
-// var errorFunc = function () {
-// 	alert("Neighborhood MAP HELPER COULD NOT LOAD.");
-// };
+window.onerror = function () {
+	alert("Neighborhood Map Helper encountered an error and could not load. Please check your internet connection or submit a bug report");
+};
 
 var starter = function() {
 	console.log("starter callback triggered - main map initialized");
@@ -154,9 +152,7 @@ var starter = function() {
 	// viewModel.markerMaker(); /* Was causing double actions because markerMaker runs automatically */
 };
 
-
 $(document).ready(function(){
-
 	// ko.applyBindings(viewModel);
 
 	// viewModel.markerMaker(); /* Previously used to start marker creation */
