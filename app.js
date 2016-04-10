@@ -58,7 +58,7 @@ var viewModel = {
 	// query: ko.observableArray(''),
 
 	knocker: function() {
-		var locArray = ko.observableArray(locArray);
+		// var locArray = ko.observableArray(locArray);
 
 		// var query = ko.observableArray('');
 
@@ -140,7 +140,7 @@ var viewModel = {
 /* -------------------------- App View below ------------------------------------------------------------ */
 
 var view = {
-	viewStarter: (function() {
+	viewStarter: function() {
 		console.log("starter callback triggered - main map initialized");
 
 		map = new google.maps.Map(document.getElementById('map'), {
@@ -159,7 +159,7 @@ var view = {
 		ko.applyBindings(viewModel);
 
 		// viewModel.query.subscribe(viewModel.search());
-	}),
+	},
 
 	GMerrorhandler: function() {
 		console.log("Google Maps service encountered a problem and could not load");
