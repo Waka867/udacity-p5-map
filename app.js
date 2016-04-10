@@ -1,3 +1,11 @@
+var markers = [];
+
+var addyInfo = [];
+
+var infowindow;
+
+var query;
+
 /* -------------------------- App data model below ------------------------------ */
 var model = {
 	locations: [
@@ -39,43 +47,31 @@ var model = {
 	]
 };
 
-/* -------------------------- App View below ------------------------------------------------------------ */
-var view = {
-	GMerrorhandler: function() {
-		alert("Google Maps service encountered a problem and could not load");
-	},
-
-	// var locArray = ko.observableArray(locArray);
-	// var query = ko.observable('');
-
-	// var search = function(value) {
-	// 	view.locArray.removeAll(); // list removal
-
-	// 	for(x in locArray) {
-	// 		if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-	// 			view.locArray.push(locArray[x]);
-	// 		}
-	// 	}
-	// }
-};
-
-// view.query.subscribe(view);
-
-/* -------------------------- App Controller below ------------------------------------------------------ */
-
-var markers = [];
-
-var addyInfo = [];
-
 var locArray = model.locations;
 
-var infowindow;
+/* -------------------------- App Controller below ------------------------------------------------------ */
 
 var viewModel = {
 
 	self: this,
 
-	// var query = ko.observable('');
+	// query: ko.observableArray(''),
+
+	knocker: function() {
+		var locArray = ko.observableArray(locArray);
+
+		// var query = ko.observableArray('');
+
+		var search = function(value) {
+			// self.locArray.removeAll();
+
+			// for(x in locArray) {
+			// 	if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+			// 		this.locArray.push(locArray[x]);
+			// 	};
+			// };
+		};
+	},
 
 	markerMaker: function(){
 		for(i = 0; i < locArray.length; i++ ) {
@@ -137,42 +133,39 @@ var viewModel = {
 			});
 		};
 
-		// var search = function(value) {
-		// 	view.locArray.removeAll(); // list removal
-
-		// 	for(x in locArray) {
-		// 		if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-		// 			view.locArray.push(locArray[x]);
-		// 		}
-		// 	}
-		// };
 	},
+};
+
+
+/* -------------------------- App View below ------------------------------------------------------------ */
+
+var view = {
+	viewStarter: (function() {
+		console.log("starter callback triggered - main map initialized");
+
+		map = new google.maps.Map(document.getElementById('map'), {
+				center: locArray[0].position,
+				zoom: 17,
+				// draggable: false,
+				noClear: true,
+				// scrollwheel: false,
+				mapTypeControl: false
+		});
+
+		// ko.applyBindings(viewModel);
+
+		viewModel.markerMaker();
+
+		ko.applyBindings(viewModel);
+
+		// viewModel.query.subscribe(viewModel.search());
+	}),
+
+	GMerrorhandler: function() {
+		console.log("Google Maps service encountered a problem and could not load");
+	}
 };
 
 window.onerror = function () {
 	alert("Neighborhood Map Helper encountered an error and could not load. Please check your internet connection or submit a bug report");
 };
-
-var starter = function() {
-	console.log("starter callback triggered - main map initialized");
-
-	map = new google.maps.Map(document.getElementById('map'), {
-			center: locArray[0].position,
-			zoom: 17,
-			// draggable: false,
-			noClear: true,
-			// scrollwheel: false,
-			mapTypeControl: false
-	});
-
-	viewModel.markerMaker();
-	ko.applyBindings(viewModel);
-};
-
-$(document).ready(function(){
-	// ko.applyBindings(viewModel);
-
-	// viewModel.markerMaker(); /* Previously used to start marker creation */
-
-	// view();/* Initializes view variables and methods*/
-});
