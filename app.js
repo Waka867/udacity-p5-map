@@ -53,23 +53,43 @@ var locArray = model.locations;
 
 var viewModel = {
 
-	self: this,
+	// self: this,
 
-	// query: ko.observableArray(''),
+	locArray: ko.observableArray(locArray),
 
-	knocker: function() {
-		// var locArray = ko.observableArray(locArray);
+	markers: ko.observableArray(markers),
 
-		// var query = ko.observableArray('');
+	// tester: console.log(locArray), /* Logs model.locations array correctly */
 
-		var search = function(value) {
-			// self.locArray.removeAll();
+	query: ko.observable(''),
 
-			// for(x in locArray) {
-			// 	if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-			// 		this.locArray.push(locArray[x]);
-			// 	};
-			// };
+	search: function(value) {
+		// console.log(locArray);
+		console.log("Search function activated");
+
+		if(value != undefined ){
+			// viewModel.clearMarkers();
+			// console.log(markers);
+			for(x = 0; x < locArray.length; x++) {
+
+				if(markers[x] != null) {
+					markers[x].setMap(null);
+				};
+				$(viewModel.locArray).hide();
+			};
+		};
+
+		for(var x in locArray) {
+			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+
+				var matchedName = locArray[x].name;
+
+				// $(locArray[x].name).show();
+
+				markers[x].setMap(map);
+
+				console.log(matchedName);
+			};
 		};
 	},
 
@@ -85,8 +105,8 @@ var viewModel = {
 				address: locArray[i].address
 			});
 
-			console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
-			console.log(locArray[i].position); /* Correct */
+			// console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
+			// console.log(locArray[i].position); /* Correct */
 
 			var toggleBounce = function(m) {
 				if (m.getAnimation() !== null) {
@@ -132,10 +152,10 @@ var viewModel = {
 				});
 			});
 		};
-
 	},
-};
 
+
+};
 
 /* -------------------------- App View below ------------------------------------------------------------ */
 
@@ -152,13 +172,7 @@ var view = {
 				mapTypeControl: false
 		});
 
-		// ko.applyBindings(viewModel);
-
 		viewModel.markerMaker();
-
-		ko.applyBindings(viewModel);
-
-		// viewModel.query.subscribe(viewModel.search());
 	},
 
 	GMerrorhandler: function() {
@@ -169,3 +183,9 @@ var view = {
 window.onerror = function () {
 	alert("Neighborhood Map Helper encountered an error and could not load. Please check your internet connection or submit a bug report");
 };
+
+$(document).ready(function() {
+
+	viewModel.query.subscribe(viewModel.search);
+	ko.applyBindings(viewModel);
+});

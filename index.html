@@ -5,9 +5,9 @@
 	<title>Neighborhood Map - Udacity Project #5</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
 
+	<script type="text/javascript" src="knockout-3.4.0.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="app.js"></script>
-	<script type="text/javascript" src="knockout-3.4.0.js"></script>
 </head>
 <body>
 
@@ -16,11 +16,11 @@
 		<div class="main-container">
 			<form id="form-container">
 				<h2>Location Filter:</h2>
-				<input placeholder="Type here" id="address" type="search" size="35" data-bind="value: viewModel.knocker, valueUpdate: 'keyup'" autocomplete="off"></input>
+				<input placeholder="Type here" id="address" type="search" size="35" name="searchbar" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"></input>
 				<!-- <p data-bind="{name: alloy, text: alloy}"></p> -->
 				<!-- <input placeholder="Search…" type="search" autocomplete="off"> -->
 			</form>
-			<ul data-bind="template: {name: 'locationList', foreach: locArray}"></ul>
+			<ul id="lister" data-bind="template: {name: 'locationList', foreach: locArray}"></ul>
 		</div>
 	</div>
 
