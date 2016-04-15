@@ -14,35 +14,40 @@ var model = {
 			position: {lat: 40.7135559, lng: -74.0077815},
 			posName: "mapPoint",
 			address: "9 Murray St",
-			infoContent: "<h1>9 Murray St</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>9 Murray St</h1><p class='wikiStuff'></p>",
+			locVis: true
 		},
 		{
 			name: "New York City Hall",
 			position: {lat: 40.712705, lng: -74.0059778},
 			posName: "mapPoint2",
 			address: "City Hall Pk",
-			infoContent: "<h1>City Hall Pk</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>City Hall Pk</h1><p class='wikiStuff'></p>",
+			locVis: true
 		},
 		{
 			name: "Woolworth Building",
 			position: {lat: 40.7123824, lng: -74.0081218},
 			posName: "mapPoint3",
 			address: "233 Broadway, 10007",
-			infoContent: "<h1>233 Broadway</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>233 Broadway</h1><p class='wikiStuff'></p>",
+			locVis: true
 		},
 		{
 			name: "One World Trade Center",
 			position: {lat: 40.713154, lng: -74.013661},
 			posName: "mapPoint4",
 			address: "285 Fulton St",
-			infoContent: "<h1>285 Fulton St</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>285 Fulton St</h1><p class='wikiStuff'></p>",
+			locVis: true
 		},
 		{
 			name: "St. Peter's Roman Catholic Church",
 			position: {lat: 40.7123014, lng: -74.0095246},
 			posName: "mapPoint5",
 			address: "22 Barclay St",
-			infoContent: "<h1>22 Barclay St</h1><p class='wikiStuff'></p>"
+			infoContent: "<h1>22 Barclay St</h1><p class='wikiStuff'></p>",
+			locVis: true
 		}
 	]
 };
@@ -53,29 +58,27 @@ var locArray = model.locations;
 
 var viewModel = {
 
-	// self: this,
-
 	locArray: ko.observableArray(locArray),
 
 	markers: ko.observableArray(markers),
 
-	// tester: console.log(locArray), /* Logs model.locations array correctly */
+	locVis: ko.observable(true),
 
 	query: ko.observable(''),
 
 	search: function(value) {
-		// console.log(locArray);
+
 		console.log("Search function activated");
 
 		if(value != undefined ){
-			// viewModel.clearMarkers();
-			// console.log(markers);
+
 			for(x = 0; x < locArray.length; x++) {
 
 				if(markers[x] != null) {
 					markers[x].setMap(null);
 				};
-				$(viewModel.locArray).hide();
+
+				viewModel.locVis(false);
 			};
 		};
 
@@ -84,11 +87,15 @@ var viewModel = {
 
 				var matchedName = locArray[x].name;
 
-				// $(locArray[x].name).show();
+
 
 				markers[x].setMap(map);
 
+
+
 				console.log(matchedName);
+
+				console.log("click");
 			};
 		};
 	},
@@ -144,8 +151,8 @@ var viewModel = {
 					var respSumm = response[2];
 					var wikiLinks = response[3];
 
-					console.log(response);
-					console.log(wikiUrl);
+					// console.log(response);
+					// console.log(wikiUrl);
 
 					/* Appends wikipedia sourced info to the infowindow via the model and each locations infoContent key */
 					$(".wikiStuff").append("<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>");
@@ -153,8 +160,6 @@ var viewModel = {
 			});
 		};
 	},
-
-
 };
 
 /* -------------------------- App View below ------------------------------------------------------------ */

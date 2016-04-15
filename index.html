@@ -11,16 +11,15 @@
 </head>
 <body>
 
+	<!-- <h1 id="page-title">NYC Neighborhood Map Helper</h1> -->
 	<h1 id="page-title">NYC Neighborhood Map Helper</h1>
 	<div id="map">
 		<div class="main-container">
 			<form id="form-container">
 				<h2>Location Filter:</h2>
 				<input placeholder="Type here" id="address" type="search" size="35" name="searchbar" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"></input>
-				<!-- <p data-bind="{name: alloy, text: alloy}"></p> -->
-				<!-- <input placeholder="Search…" type="search" autocomplete="off"> -->
 			</form>
-			<ul id="lister" data-bind="template: {name: 'locationList', foreach: locArray}"></ul>
+			<ul id="lister" data-bind="template: {name: 'locationList', foreach: locArray}"></ul> <!--NOTE: Duplicate for testing       -->
 		</div>
 	</div>
 
@@ -28,7 +27,7 @@
 
 	<script type="text/html" id="locationList">
 		<li>
-			<strong data-bind="text: name"></strong>
+			<strong data-bind="{text: name, visible: viewModel.locVis}"></strong><!--      NOTE: Duplicate for testing       -->
 		</li>
 	</script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>
