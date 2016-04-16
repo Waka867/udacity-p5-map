@@ -1,6 +1,6 @@
 var markers = [];
 
-var addyInfo = [];
+// var  = [];
 
 var infowindow;
 
@@ -15,7 +15,7 @@ var model = {
 			posName: "mapPoint",
 			address: "9 Murray St",
 			infoContent: "<h1>9 Murray St</h1><p class='wikiStuff'></p>",
-			locVis: true
+			// locVis: false
 		},
 		{
 			name: "New York City Hall",
@@ -23,7 +23,7 @@ var model = {
 			posName: "mapPoint2",
 			address: "City Hall Pk",
 			infoContent: "<h1>City Hall Pk</h1><p class='wikiStuff'></p>",
-			locVis: true
+			// locVis: false
 		},
 		{
 			name: "Woolworth Building",
@@ -31,7 +31,7 @@ var model = {
 			posName: "mapPoint3",
 			address: "233 Broadway, 10007",
 			infoContent: "<h1>233 Broadway</h1><p class='wikiStuff'></p>",
-			locVis: true
+			// locVis: false
 		},
 		{
 			name: "One World Trade Center",
@@ -39,7 +39,7 @@ var model = {
 			posName: "mapPoint4",
 			address: "285 Fulton St",
 			infoContent: "<h1>285 Fulton St</h1><p class='wikiStuff'></p>",
-			locVis: true
+			// locVis: false
 		},
 		{
 			name: "St. Peter's Roman Catholic Church",
@@ -47,7 +47,7 @@ var model = {
 			posName: "mapPoint5",
 			address: "22 Barclay St",
 			infoContent: "<h1>22 Barclay St</h1><p class='wikiStuff'></p>",
-			locVis: true
+			// locVis: false
 		}
 	]
 };
@@ -58,47 +58,9 @@ var locArray = model.locations;
 
 var viewModel = {
 
-	locArray: ko.observableArray(locArray),
-
-	markers: ko.observableArray(markers),
-
 	locVis: ko.observable(true),
 
 	query: ko.observable(''),
-
-	search: function(value) {
-
-		console.log("Search function activated");
-
-		if(value != undefined ){
-
-			for(x = 0; x < locArray.length; x++) {
-
-				if(markers[x] != null) {
-					markers[x].setMap(null);
-				};
-
-				viewModel.locVis(false);
-			};
-		};
-
-		for(var x in locArray) {
-			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-
-				var matchedName = locArray[x].name;
-
-
-
-				markers[x].setMap(map);
-
-
-
-				console.log(matchedName);
-
-				console.log("click");
-			};
-		};
-	},
 
 	markerMaker: function(){
 		for(i = 0; i < locArray.length; i++ ) {
@@ -151,13 +113,36 @@ var viewModel = {
 					var respSumm = response[2];
 					var wikiLinks = response[3];
 
-					// console.log(response);
-					// console.log(wikiUrl);
-
 					/* Appends wikipedia sourced info to the infowindow via the model and each locations infoContent key */
 					$(".wikiStuff").append("<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>");
 				});
 			});
+		};
+	},
+
+	search: function(value) {
+
+		if(value != undefined ){
+
+			for(x = 0; x < locArray.length; x++) {
+
+				if(markers[x] != null) {
+					markers[x].setMap(null);
+				};
+
+				// viewModel.locVis = ko.observable(false);
+			};
+		};
+
+		for(var x in locArray) {
+			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+
+
+
+				console.log(locArray[x].name);
+
+				markers[x].setMap(map);
+			};
 		};
 	},
 };
