@@ -1,7 +1,5 @@
 var markers = [];
 
-// var  = [];
-
 var infowindow;
 
 var query;
@@ -15,7 +13,7 @@ var model = {
 			posName: "mapPoint",
 			address: "9 Murray St",
 			infoContent: "<h1>9 Murray St</h1><p class='wikiStuff'></p>",
-			// locVis: false
+			markerID: 0
 		},
 		{
 			name: "New York City Hall",
@@ -23,7 +21,7 @@ var model = {
 			posName: "mapPoint2",
 			address: "City Hall Pk",
 			infoContent: "<h1>City Hall Pk</h1><p class='wikiStuff'></p>",
-			// locVis: false
+			markerID: 1
 		},
 		{
 			name: "Woolworth Building",
@@ -31,7 +29,7 @@ var model = {
 			posName: "mapPoint3",
 			address: "233 Broadway, 10007",
 			infoContent: "<h1>233 Broadway</h1><p class='wikiStuff'></p>",
-			// locVis: false
+			markerID: 2
 		},
 		{
 			name: "One World Trade Center",
@@ -39,7 +37,7 @@ var model = {
 			posName: "mapPoint4",
 			address: "285 Fulton St",
 			infoContent: "<h1>285 Fulton St</h1><p class='wikiStuff'></p>",
-			// locVis: false
+			markerID: 3
 		},
 		{
 			name: "St. Peter's Roman Catholic Church",
@@ -47,12 +45,16 @@ var model = {
 			posName: "mapPoint5",
 			address: "22 Barclay St",
 			infoContent: "<h1>22 Barclay St</h1><p class='wikiStuff'></p>",
-			// locVis: false
+			markerID: 4
 		}
 	]
 };
 
 var locArray = model.locations;
+
+var trueOrFalse = true;
+
+var isSubHeaderVisible = ko.observable(trueOrFalse);
 
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
@@ -71,11 +73,9 @@ var viewModel = {
 				draggable: false,
 				info: locArray[i].infoContent,
 				animation: google.maps.Animation.DROP,
-				address: locArray[i].address
+				address: locArray[i].address,
+				markerID: locArray[i].markerID,
 			});
-
-			// console.log(markers[i].title); /* test - NOTE: log lists all address correctly */
-			// console.log(locArray[i].position); /* Correct */
 
 			var toggleBounce = function(m) {
 				if (m.getAnimation() !== null) {
@@ -101,7 +101,6 @@ var viewModel = {
 				var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + this.title + '&format=json';
 
 				console.log(this.title);
-				// console.log(infowindow);
 
 				var ajax = $.ajax({
 					url: wikiUrl,
@@ -112,7 +111,6 @@ var viewModel = {
 					var respTitle = response[0];
 					var respSumm = response[2];
 					var wikiLinks = response[3];
-
 					/* Appends wikipedia sourced info to the infowindow via the model and each locations infoContent key */
 					$(".wikiStuff").append("<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>");
 				});
@@ -121,29 +119,43 @@ var viewModel = {
 	},
 
 	search: function(value) {
-
 		if(value != undefined ){
-
 			for(x = 0; x < locArray.length; x++) {
-
 				if(markers[x] != null) {
 					markers[x].setMap(null);
 				};
-
-				// viewModel.locVis = ko.observable(false);
 			};
 		};
 
 		for(var x in locArray) {
 			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-
-
-
 				console.log(locArray[x].name);
-
 				markers[x].setMap(map);
 			};
 		};
+	},
+
+	listClick: function() {
+		var self = this;
+		var id = self.markerID;
+
+		console.log(self.name + " is located at " + self.address);
+		console.log(markers[id]);
+
+		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
+	},
+
+	listClear: function() {
+		// viewModel.isSubHeaderVisible = ko.observable(false);
+		var truther = function(){
+			if(trueOrFalse == true){
+				var trueOrFalse = false;
+			} else if(trueOrFalse == false) {
+				var trueOrFalse = true;
+			};
+		};
+		truther();
+		console.log("list is cleared");
 	},
 };
 
@@ -167,7 +179,7 @@ var view = {
 
 	GMerrorhandler: function() {
 		console.log("Google Maps service encountered a problem and could not load");
-	}
+	},
 };
 
 window.onerror = function () {
@@ -175,7 +187,6 @@ window.onerror = function () {
 };
 
 $(document).ready(function() {
-
 	viewModel.query.subscribe(viewModel.search);
 	ko.applyBindings(viewModel);
 });

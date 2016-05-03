@@ -1,5 +1,4 @@
 body {
-	/*background-image: url(AFR_Logo2.jpg);*/
 	background-repeat: no-repeat;
 	background-size: cover;
 }
@@ -28,13 +27,9 @@ body {
 	display: inline-block;
 }
 
-#left-section {
-	/*float: left;*/
-	/*max-width: 45%;*/
-}
-
 #lister {
 	list-style: none;
+	max-width: 50%;
 }
 
 #location-list {
@@ -43,11 +38,9 @@ body {
 }
 
 #map {
-	/*background-color: red;*/
 	display: inline-block;
 	width: 100%;
 	height: 100vh;
-	/*background-image: url(AFR_Logo2.jpg);*/
 	img {
 		max-width: 100%;
 		width: 100%;
@@ -57,12 +50,11 @@ body {
 #page-title {
 	text-align: center;
 	font-family: sans-serif;
-/*	font-style: italic;*/
 }
 
-#right-section {
-	/*float: right;*/
-/*	max-width: 45%;*/
+#listClicked {
+	// display: none;
+	text-align: center;
 }
 
 #submit-btn {
