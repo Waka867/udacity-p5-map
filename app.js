@@ -27,7 +27,7 @@ var model = {
 			name: "Woolworth Building",
 			position: {lat: 40.7123824, lng: -74.0081218},
 			posName: "mapPoint3",
-			address: "233 Broadway, 10007",
+			address: "233 Broadway",
 			infoContent: "<h1>233 Broadway</h1><p class='wikiStuff'></p>",
 			markerID: 2
 		},
@@ -56,6 +56,8 @@ var trueOrFalse = true;
 
 var isSubHeaderVisible = ko.observable(trueOrFalse);
 
+var infoW = infowindow;
+
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
 var viewModel = {
@@ -63,6 +65,17 @@ var viewModel = {
 	locVis: ko.observable(true),
 
 	query: ko.observable(''),
+
+	toggleBounce: function(m) {
+		if (m.getAnimation() !== null) {
+			m.setAnimation(null);
+		} else {
+			m.setAnimation(google.maps.Animation.BOUNCE);
+		};
+		setTimeout(function(){
+			m.setAnimation(null); /* Limits how long a marker will bounce for when clicked */
+		}, 1400)
+	},
 
 	markerMaker: function(){
 		for(i = 0; i < locArray.length; i++ ) {
@@ -75,24 +88,20 @@ var viewModel = {
 				animation: google.maps.Animation.DROP,
 				address: locArray[i].address,
 				markerID: locArray[i].markerID,
+				bouncy: function() {
+					viewModel.toggleBounce(this);
+				},
+				windower: function() {
+					// console.log(infowindow);
+					// infoW.setContent(this.info); // NOTE***** currently infowindow is undefined
+					// infoW.open(map, this); // NOTE***** currently infowindow is undefined
+				},
 			});
 
-			var toggleBounce = function(m) {
-				if (m.getAnimation() !== null) {
-					m.setAnimation(null);
-				} else {
-					m.setAnimation(google.maps.Animation.BOUNCE);
-				};
-				setTimeout(function(){
-					m.setAnimation(null); /* Limits how long a marker will bounce for when clicked */
-				}, 700)
-			};
-
 			google.maps.event.addListener(markers[i], 'click', function () {
-				toggleBounce(this);
+				viewModel.toggleBounce(this);
 				if(!infowindow) {
-					infowindow = new google.maps.InfoWindow({
-						// content: "TEST",
+						infowindow = new google.maps.InfoWindow({
 					});
 				};
 				infowindow.setContent(this.info);
@@ -100,7 +109,7 @@ var viewModel = {
 
 				var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + this.title + '&format=json';
 
-				console.log(this.title);
+				console.log(infowindow);
 
 				var ajax = $.ajax({
 					url: wikiUrl,
@@ -135,27 +144,19 @@ var viewModel = {
 		};
 	},
 
-	listClick: function() {
-		var self = this;
-		var id = self.markerID;
-
-		console.log(self.name + " is located at " + self.address);
-		console.log(markers[id]);
-
-		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
-	},
-
 	listClear: function() {
-		// viewModel.isSubHeaderVisible = ko.observable(false);
-		var truther = function(){
-			if(trueOrFalse == true){
-				var trueOrFalse = false;
-			} else if(trueOrFalse == false) {
-				var trueOrFalse = true;
-			};
-		};
-		truther();
-		console.log("list is cleared");
+		console.log("Sub header has been clicked");
+
+		// trueOrFalse = false;
+		// 	var truther = function(){
+		// 		if(trueOrFalse == true){
+		// 			var trueOrFalse = false;
+		// 		} else if(trueOrFalse == false) {
+		// 			var trueOrFalse = true;
+		// 		};
+		// 	};
+		// 	truther();
+		// 	console.log("list is cleared");
 	},
 };
 
@@ -170,7 +171,7 @@ var view = {
 				zoom: 17,
 				// draggable: false,
 				noClear: true,
-				// scrollwheel: false,
+				scrollwheel: false,
 				mapTypeControl: false
 		});
 
@@ -179,6 +180,19 @@ var view = {
 
 	GMerrorhandler: function() {
 		console.log("Google Maps service encountered a problem and could not load");
+	},
+
+	listClick: function() {
+		var self = this;
+		var id = self.markerID;
+
+		console.log(self.name + " is located at " + self.address);
+		console.log(markers[id].markerID);
+
+		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
+
+		markers[id].bouncy(); // Starts the toggleBounce function located within each marker object
+		markers[id].windower(); // Opens infowindow when list entry is clicked
 	},
 };
 
