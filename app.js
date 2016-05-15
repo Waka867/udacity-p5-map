@@ -52,15 +52,26 @@ var model = {
 
 var locArray = model.locations;
 
-var trueOrFalse = true;
+// var trueOrFalse = true;
 
-var isSubHeaderVisible = ko.observable(trueOrFalse);
+// var truthy = function() {
+// 	if(viewModel.isSubHeaderVisible === true) {
+// 		viewModel.isSubHeaderVisible = false;
+// 	} else {
+// 		viewModel.isSubHeaderVisible = true;
+// 	};
+// 	console.log("werwerwe");
+// };
 
-var infoW = infowindow;
+// var isSubHeaderVisible = ko.observable(trueOrFalse);
+
+// var locVis = ko.observable(trueOrFalse);
 
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
 var viewModel = {
+
+	isSubHeaderVisible: ko.observable(true),
 
 	locVis: ko.observable(true),
 
@@ -77,6 +88,15 @@ var viewModel = {
 		}, 1400)
 	},
 
+	truthy: function() {
+		if(viewModel.isSubHeaderVisible === true) {
+			viewModel.isSubHeaderVisible = false;
+		} else {
+			viewModel.isSubHeaderVisible = true;
+		};
+		console.log("werwerwe");
+	},
+
 	markerMaker: function(){
 		for(i = 0; i < locArray.length; i++ ) {
 			markers[i] = new google.maps.Marker({
@@ -91,11 +111,6 @@ var viewModel = {
 				bouncy: function() {
 					viewModel.toggleBounce(this);
 				},
-				windower: function() {
-					// console.log(infowindow);
-					// infoW.setContent(this.info); // NOTE***** currently infowindow is undefined
-					// infoW.open(map, this); // NOTE***** currently infowindow is undefined
-				},
 			});
 
 			google.maps.event.addListener(markers[i], 'click', function () {
@@ -109,7 +124,7 @@ var viewModel = {
 
 				var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + this.title + '&format=json';
 
-				console.log(infowindow);
+				viewModel.truthy();
 
 				var ajax = $.ajax({
 					url: wikiUrl,
@@ -146,17 +161,6 @@ var viewModel = {
 
 	listClear: function() {
 		console.log("Sub header has been clicked");
-
-		// trueOrFalse = false;
-		// 	var truther = function(){
-		// 		if(trueOrFalse == true){
-		// 			var trueOrFalse = false;
-		// 		} else if(trueOrFalse == false) {
-		// 			var trueOrFalse = true;
-		// 		};
-		// 	};
-		// 	truther();
-		// 	console.log("list is cleared");
 	},
 };
 
@@ -192,7 +196,6 @@ var view = {
 		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
 
 		markers[id].bouncy(); // Starts the toggleBounce function located within each marker object
-		markers[id].windower(); // Opens infowindow when list entry is clicked
 	},
 };
 

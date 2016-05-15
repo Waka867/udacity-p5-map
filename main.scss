@@ -4,7 +4,7 @@ body {
 }
 
 .main-container {
-	background-color: rgba(255, 159, 0, 0.72);
+	background-color: rgba(121,150,255,0.42);
 	max-width: 90%;
 	margin: 0 auto;
 	padding: 0 1%;
@@ -13,6 +13,9 @@ body {
 	box-shadow: 15px 2px 30px -2px darkgray;
 	z-index: 1;
 	position: inherit;
+	@media screen and (max-width: 737px) {
+		font-size: 1.5em;
+	}
 }
 
 #address {
@@ -34,7 +37,7 @@ body {
 
 #location-list {
 	display: inline-block;
-	font-size: 1.4em;
+	font-size: 1.5em;
 }
 
 #map {
@@ -44,7 +47,8 @@ body {
 	img {
 		max-width: 100%;
 		width: 100%;
-	}
+	};
+	border-radius: 15px;
 }
 
 #page-title {
@@ -53,8 +57,12 @@ body {
 }
 
 #listClicked {
-	// display: none;
+	text-shadow: 1px 1px 8px black;
 	text-align: center;
+	background-color: rgba(121,150,255,0.42);
+	color: white;
+	border-radius: 12px;
+	border: 1px darkgray solid;
 }
 
 #submit-btn {

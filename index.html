@@ -18,7 +18,7 @@
 				<input placeholder="Type here" id="address" type="search" size="35" name="searchbar" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"></input>
 			</form>
 			<ul id="lister" data-bind="template: {name: 'locationList', foreach: locArray}"></ul> <!--NOTE: Duplicate for testing       -->
-			<h3 id="listClicked" data-bind="{click: viewModel.listClear, visible: isSubHeaderVisible}"></h3>
+			<h3 id="listClicked" data-bind="{click: viewModel.listClear, visible: viewModel.isSubHeaderVisible}"></h3>
 		</div>
 	</div>
 
