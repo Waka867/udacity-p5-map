@@ -156,7 +156,6 @@ var viewModel = {
 
 		for(var x in markers) {
 			if(markers[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-			// locArray.push(viewModel.locations[x]);
 			markers[x].setMap(map);
 			};
 		};
