@@ -15,9 +15,9 @@
 		<div class="main-container">
 			<form id="form-container">
 				<h2>Location Filter:</h2>
-				<input placeholder="Type here" id="address" type="search" size="35" name="searchbar" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off"></input>
+				<input placeholder="Type here" id="address" type="text" size="35" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset" size="35">reset map</button>
 			</form>
-			<ul id="lister" data-bind="template: {name: 'locationList', foreach: locArray}"></ul> <!--NOTE: Duplicate for testing       -->
+			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul> <!--NOTE: Duplicate for testing       -->
 			<h3 id="listClicked" data-bind="{click: viewModel.listClear, visible: viewModel.isSubHeaderVisible}"></h3>
 		</div>
 	</div>

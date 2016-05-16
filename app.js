@@ -2,8 +2,6 @@ var markers = [];
 
 var infowindow;
 
-var query;
-
 /* -------------------------- App data model below ------------------------------ */
 var model = {
 	locations: [
@@ -77,6 +75,8 @@ var viewModel = {
 
 	query: ko.observable(''),
 
+	locations: ko.observableArray(markers),
+
 	toggleBounce: function(m) {
 		if (m.getAnimation() !== null) {
 			m.setAnimation(null);
@@ -87,6 +87,9 @@ var viewModel = {
 			m.setAnimation(null); /* Limits how long a marker will bounce for when clicked */
 		}, 1400)
 	},
+
+	// The truthy function is supposed to get called when a user clicks on a marker, thus closing a subheader if it's open or vice versa
+	// It still doesn't seem to work. I'm having trouble finding ways to get this to work
 
 	truthy: function() {
 		if(viewModel.isSubHeaderVisible === true) {
@@ -143,19 +146,31 @@ var viewModel = {
 	},
 
 	search: function(value) {
-		if(value != undefined ){
-			for(x = 0; x < locArray.length; x++) {
-				if(markers[x] != null) {
-					markers[x].setMap(null);
-				};
+		for (var i = 0; i < markers.length; i++) {
+			markers[i].setMap(null);
+		};
+
+		locArray = [];
+
+		console.log("search function fired");
+
+		for(var x in markers) {
+			if(markers[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
+			// locArray.push(viewModel.locations[x]);
+			markers[x].setMap(map);
 			};
 		};
 
-		for(var x in locArray) {
-			if(locArray[x].name.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
-				console.log(locArray[x].name);
-				markers[x].setMap(map);
-			};
+		// Resets map markers when input box becomaes empty again
+		if(value = undefined) {
+			viewModel.markerMaker();
+		};
+	},
+
+	listReset: function() {
+	// Resets map markers
+		if(value = undefined) {
+			viewModel.markerMaker();
 		};
 	},
 
