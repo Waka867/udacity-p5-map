@@ -50,7 +50,7 @@ var model = {
 
 var locArray = model.locations;
 
-// var trueOrFalse = true;
+var trueOrFalse = true;
 
 // var truthy = function() {
 // 	if(viewModel.isSubHeaderVisible === true) {
@@ -61,21 +61,19 @@ var locArray = model.locations;
 // 	console.log("werwerwe");
 // };
 
-// var isSubHeaderVisible = ko.observable(trueOrFalse);
-
-// var locVis = ko.observable(trueOrFalse);
-
 /* -------------------------- App Controller below ------------------------------------------------------ */
 
 var viewModel = {
 
-	isSubHeaderVisible: ko.observable(true),
+	isSubHeaderVisible: ko.observable(trueOrFalse),
 
 	locVis: ko.observable(true),
 
 	query: ko.observable(''),
 
 	locations: ko.observableArray(markers),
+
+	visTest: ko.observable(true),
 
 	toggleBounce: function(m) {
 		if (m.getAnimation() !== null) {
@@ -92,11 +90,12 @@ var viewModel = {
 	// It still doesn't seem to work. I'm having trouble finding ways to get this to work
 
 	truthy: function() {
-		if(viewModel.isSubHeaderVisible === true) {
-			viewModel.isSubHeaderVisible = false;
-		} else {
-			viewModel.isSubHeaderVisible = true;
-		};
+		// if(viewModel.isSubHeaderVisible === true) {
+		// 	viewModel.isSubHeaderVisible = false;
+		// } else {
+		// 	viewModel.isSubHeaderVisible = true;
+		// };
+
 		console.log("werwerwe");
 	},
 
@@ -150,8 +149,6 @@ var viewModel = {
 			markers[i].setMap(null);
 		};
 
-		locArray = [];
-
 		console.log("search function fired");
 
 		for(var x in markers) {
@@ -176,6 +173,24 @@ var viewModel = {
 	listClear: function() {
 		console.log("Sub header has been clicked");
 	},
+
+	listClick: function() {
+		var self = this;
+		var id = self.markerID;
+
+		console.log(self.name + " is located at " + self.address);
+		// console.log(markers[id].markerID);
+
+		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
+
+		markers[id].bouncy(); // Starts the toggleBounce function located within each marker object
+
+		// visTest = ko.observable(false);
+		// viewModel.tester = ko.observable('');
+		// viewModel.markerMaker();
+	},
+
+	// tester: ko.observable("TESTER!")
 };
 
 /* -------------------------- App View below ------------------------------------------------------------ */
@@ -198,19 +213,7 @@ var view = {
 
 	GMerrorhandler: function() {
 		console.log("Google Maps service encountered a problem and could not load");
-	},
-
-	listClick: function() {
-		var self = this;
-		var id = self.markerID;
-
-		console.log(self.name + " is located at " + self.address);
-		console.log(markers[id].markerID);
-
-		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
-
-		markers[id].bouncy(); // Starts the toggleBounce function located within each marker object
-	},
+	}
 };
 
 window.onerror = function () {

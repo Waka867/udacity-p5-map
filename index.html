@@ -19,6 +19,8 @@
 			</form>
 			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul> <!--NOTE: Duplicate for testing       -->
 			<h3 id="listClicked" data-bind="{click: viewModel.listClear, visible: viewModel.isSubHeaderVisible}"></h3>
+			<!-- <h1 data-bind="{text: viewModel.tester, visible: viewModel.visTest}"></h1> -->
+			<!-- The line above is from my tests on how to make knockout toggle an element -->
 		</div>
 	</div>
 
@@ -26,7 +28,7 @@
 
 	<script type="text/html" id="locationList">
 		<li>
-			<strong data-bind="{text: name, visible: viewModel.locVis, click: view.listClick}"></strong>
+			<strong data-bind="{text: name, visible: viewModel.locVis, click: viewModel.listClick}"></strong>
 		</li>
 	</script>
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>

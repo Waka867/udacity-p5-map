@@ -1,6 +1,8 @@
 body {
-	background-repeat: no-repeat;
-	background-size: cover;
+	// background-repeat: no-repeat;
+	// background-size: cover;
+	margin: 0;
+	display: inherit;
 }
 
 .main-container {
@@ -49,6 +51,9 @@ body {
 		width: 100%;
 	};
 	border-radius: 15px;
+	@media only screen and (max-width: 770px) {
+		margin: 15px;
+	};
 }
 
 #page-title {
