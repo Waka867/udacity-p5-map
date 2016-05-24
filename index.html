@@ -18,9 +18,7 @@
 				<input placeholder="Type here" id="address" type="text" size="35" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset" size="35">reset map</button>
 			</form>
 			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul> <!--NOTE: Duplicate for testing       -->
-			<h3 id="listClicked" data-bind="{click: viewModel.listClear, visible: viewModel.isSubHeaderVisible}"></h3>
-			<!-- <h1 data-bind="{text: viewModel.tester, visible: viewModel.visTest}"></h1> -->
-			<!-- The line above is from my tests on how to make knockout toggle an element -->
+			<h3 id="listClicked" data-bind="{click: viewModel.subheaderClear, visible: viewModel.isSubHeaderVisible}"></h3>
 		</div>
 	</div>
 
@@ -31,6 +29,6 @@
 			<strong data-bind="{text: name, visible: viewModel.locVis, click: viewModel.listClick}"></strong>
 		</li>
 	</script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>
+	<script async="true" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script> <!-- TODO make sure the map script tag is loaded async -->
 </body>
 </html>

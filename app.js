@@ -50,55 +50,55 @@ var model = {
 
 var locArray = model.locations;
 
-var trueOrFalse = true;
+var locData = [];
 
-// var truthy = function() {
-// 	if(viewModel.isSubHeaderVisible === true) {
-// 		viewModel.isSubHeaderVisible = false;
-// 	} else {
-// 		viewModel.isSubHeaderVisible = true;
-// 	};
-// 	console.log("werwerwe");
-// };
+var locConstructor = function(data){
+	// this.name = ko.observable(data.name);
+};
 
-/* -------------------------- App Controller below ------------------------------------------------------ */
+// Function helps turn off subheader when a marker is clicked
+var truthy = function() {
+	if(viewModel.isSubHeaderVisible() === true) {
+		viewModel.isSubHeaderVisible(false);
+	};
+};
+
+/* -------------------------- App Controller / View Model below ------------------------------------------------------ */
 
 var viewModel = {
-
-	isSubHeaderVisible: ko.observable(trueOrFalse),
+	isSubHeaderVisible: ko.observable(''),
 
 	locVis: ko.observable(true),
 
 	query: ko.observable(''),
 
-	locations: ko.observableArray(markers),
+	places: ko.observableArray(),
 
-	visTest: ko.observable(true),
+	pusher: function(){
+		for(i = 0; i < markers.length; i++){
+			// console.log("locations are " + locationData.name);
+			// console.log(viewModel.locations());
 
+			// Here is where you should push individual markers into locData, although it may not really be necessary because that may be redundant
+			console.log(markers[i].title);
+
+		};
+	},
+
+	// Makes markers bounce when clicked or activated
 	toggleBounce: function(m) {
 		if (m.getAnimation() !== null) {
 			m.setAnimation(null);
 		} else {
 			m.setAnimation(google.maps.Animation.BOUNCE);
 		};
+		// Limits how long a marker will bounce for when clicked or activated
 		setTimeout(function(){
-			m.setAnimation(null); /* Limits how long a marker will bounce for when clicked */
+			m.setAnimation(null);
 		}, 1400)
 	},
 
-	// The truthy function is supposed to get called when a user clicks on a marker, thus closing a subheader if it's open or vice versa
-	// It still doesn't seem to work. I'm having trouble finding ways to get this to work
-
-	truthy: function() {
-		// if(viewModel.isSubHeaderVisible === true) {
-		// 	viewModel.isSubHeaderVisible = false;
-		// } else {
-		// 	viewModel.isSubHeaderVisible = true;
-		// };
-
-		console.log("werwerwe");
-	},
-
+	// Creates markers and adds click listener
 	markerMaker: function(){
 		for(i = 0; i < locArray.length; i++ ) {
 			markers[i] = new google.maps.Marker({
@@ -117,6 +117,7 @@ var viewModel = {
 
 			google.maps.event.addListener(markers[i], 'click', function () {
 				viewModel.toggleBounce(this);
+
 				if(!infowindow) {
 						infowindow = new google.maps.InfoWindow({
 					});
@@ -126,7 +127,7 @@ var viewModel = {
 
 				var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + this.title + '&format=json';
 
-				viewModel.truthy();
+				truthy();
 
 				var ajax = $.ajax({
 					url: wikiUrl,
@@ -144,12 +145,11 @@ var viewModel = {
 		};
 	},
 
+	// Search function for text input box
 	search: function(value) {
 		for (var i = 0; i < markers.length; i++) {
 			markers[i].setMap(null);
 		};
-
-		console.log("search function fired");
 
 		for(var x in markers) {
 			if(markers[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
@@ -157,48 +157,46 @@ var viewModel = {
 			};
 		};
 
-		// Resets map markers when input box becomaes empty again
+		// Resets map markers when input box becomes empty again
 		if(value = undefined) {
 			viewModel.markerMaker();
 		};
 	},
 
+	// Resets map markers and subheader
 	listReset: function() {
-	// Resets map markers
 		if(value = undefined) {
 			viewModel.markerMaker();
 		};
 	},
 
-	listClear: function() {
-		console.log("Sub header has been clicked");
+	// Clears subheader when subheader is clicked
+	subheaderClear: function() {
+		viewModel.isSubHeaderVisible(false);
 	},
 
+	// Puts together subheader when a list item is clicked
 	listClick: function() {
 		var self = this;
+
 		var id = self.markerID;
 
-		console.log(self.name + " is located at " + self.address);
-		// console.log(markers[id].markerID);
+		if($("#listClicked") != null) {
+			viewModel.subheaderClear();
+		};
 
 		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
+		// Starts the toggleBounce function located within each marker object
+		markers[id].bouncy();
 
-		markers[id].bouncy(); // Starts the toggleBounce function located within each marker object
-
-		// visTest = ko.observable(false);
-		// viewModel.tester = ko.observable('');
-		// viewModel.markerMaker();
-	},
-
-	// tester: ko.observable("TESTER!")
+		viewModel.isSubHeaderVisible(true);
+	}
 };
 
 /* -------------------------- App View below ------------------------------------------------------------ */
 
 var view = {
 	viewStarter: function() {
-		console.log("starter callback triggered - main map initialized");
-
 		map = new google.maps.Map(document.getElementById('map'), {
 				center: locArray[0].position,
 				zoom: 17,
@@ -209,10 +207,14 @@ var view = {
 		});
 
 		viewModel.markerMaker();
+
+		viewModel.pusher();
 	},
 
+	// Error message
 	GMerrorhandler: function() {
 		console.log("Google Maps service encountered a problem and could not load");
+		alert("Google Maps service encountered a problem and could not load");
 	}
 };
 
@@ -222,5 +224,6 @@ window.onerror = function () {
 
 $(document).ready(function() {
 	viewModel.query.subscribe(viewModel.search);
+
 	ko.applyBindings(viewModel);
 });
