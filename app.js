@@ -197,7 +197,7 @@ var viewModel = {
 			viewModel.subheaderClear();
 		};
 
-		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
+		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>" + "<sub>click here to close</sub>");
 
 		// Starts the toggleBounce function located within each marker object
 		markers[id].bouncy();
@@ -215,8 +215,7 @@ var view = {
 	viewStarter: function() {
 		map = new google.maps.Map(document.getElementById('map'), {
 				center: locArray[0].position,
-				zoom: 17,
-				// draggable: false,
+				zoom: 16,
 				noClear: true,
 				scrollwheel: false,
 				mapTypeControl: false

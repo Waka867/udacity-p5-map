@@ -1,27 +1,30 @@
 body {
-	// background-repeat: no-repeat;
-	// background-size: cover;
-	margin: 0;
+	margin: 1%;
 	display: inherit;
+	@media screen and (max-width: 737px){
+		margin: 2%;
+	};
 }
 
 .main-container {
-	background-color: rgba(121,150,255,0.42);
+	background-color: rgba(121,150,255,0.65);
 	max-width: 90%;
 	margin: 0 auto;
-	padding: 0 1%;
+	padding: 1% 1%;
 	border: 1px darkgray solid;
 	border-radius: 15px;
 	box-shadow: 15px 2px 30px -2px darkgray;
-	z-index: 1;
 	position: inherit;
 	@media screen and (max-width: 737px) {
-		font-size: 1.5em;
-	}
+		font-size: 1.4em;
+	};
+	text-align: center;
+	z-index: 1;
 }
 
 #address {
 	font-size: 1.2em;
+	border-radius: 5px;
 }
 
 #bottomBar {
@@ -30,11 +33,18 @@ body {
 
 #form-container {
 	display: inline-block;
+	label {
+		margin: auto 1%;
+		font-weight: bold;
+	};
+	button {
+		font-size: 1em;
+		margin: 1%;
+	};
 }
 
 #lister {
 	list-style: none;
-	max-width: 50%;
 }
 
 #location-list {
@@ -51,9 +61,6 @@ body {
 		width: 100%;
 	};
 	border-radius: 15px;
-	@media only screen and (max-width: 770px) {
-		margin: 15px;
-	};
 }
 
 #page-title {
@@ -68,6 +75,7 @@ body {
 	color: white;
 	border-radius: 12px;
 	border: 1px darkgray solid;
+	margin: 0 auto 1% auto;
 }
 
 #submit-btn {

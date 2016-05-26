@@ -4,7 +4,6 @@
 	<meta charset="UTF-8">
 	<title>Neighborhood Map - Udacity Project #5</title>
 	<link rel="stylesheet" type="text/css" href="main.css">
-
 	<script type="text/javascript" src="knockout-3.4.0.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="app.js"></script>
@@ -14,8 +13,7 @@
 	<div id="map">
 		<div class="main-container">
 			<form id="form-container">
-				<h2>Location Filter:</h2>
-				<input placeholder="Type here" id="address" type="text" size="35" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset" size="35">reset map</button>
+				<label>Location Filter</label><input placeholder="Type here" id="address" type="text" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset">reset map</button>
 			</form>
 			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul>
 			<h3 id="listClicked" data-bind="{click: viewModel.subheaderClear, visible: viewModel.isSubHeaderVisible}"></h3>
