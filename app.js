@@ -1,5 +1,7 @@
+// Array containing markers after they've been created by viewModel.markerMaker();
 var markers = [];
 
+// Defines infowindow for later value assignment
 var infowindow;
 
 /* -------------------------- App data model below ------------------------------ */
@@ -11,7 +13,8 @@ var model = {
 			posName: "mapPoint",
 			address: "9 Murray St",
 			infoContent: "<h1>9 Murray St</h1><p class='wikiStuff'></p>",
-			markerID: 0
+			markerID: 0,
+			visibility: ko.observable(true)
 		},
 		{
 			name: "New York City Hall",
@@ -19,7 +22,8 @@ var model = {
 			posName: "mapPoint2",
 			address: "City Hall Pk",
 			infoContent: "<h1>City Hall Pk</h1><p class='wikiStuff'></p>",
-			markerID: 1
+			markerID: 1,
+			visibility: ko.observable(true)
 		},
 		{
 			name: "Woolworth Building",
@@ -27,7 +31,8 @@ var model = {
 			posName: "mapPoint3",
 			address: "233 Broadway",
 			infoContent: "<h1>233 Broadway</h1><p class='wikiStuff'></p>",
-			markerID: 2
+			markerID: 2,
+			visibility: ko.observable(true)
 		},
 		{
 			name: "One World Trade Center",
@@ -35,7 +40,8 @@ var model = {
 			posName: "mapPoint4",
 			address: "285 Fulton St",
 			infoContent: "<h1>285 Fulton St</h1><p class='wikiStuff'></p>",
-			markerID: 3
+			markerID: 3,
+			visibility: ko.observable(true)
 		},
 		{
 			name: "St. Peter's Roman Catholic Church",
@@ -43,18 +49,13 @@ var model = {
 			posName: "mapPoint5",
 			address: "22 Barclay St",
 			infoContent: "<h1>22 Barclay St</h1><p class='wikiStuff'></p>",
-			markerID: 4
+			markerID: 4,
+			visibility: ko.observable(true)
 		}
 	]
 };
 
 var locArray = model.locations;
-
-var locData = [];
-
-var locConstructor = function(data){
-	// this.name = ko.observable(data.name);
-};
 
 // Function helps turn off subheader when a marker is clicked
 var truthy = function() {
@@ -64,26 +65,10 @@ var truthy = function() {
 };
 
 /* -------------------------- App Controller / View Model below ------------------------------------------------------ */
-
 var viewModel = {
 	isSubHeaderVisible: ko.observable(''),
 
-	locVis: ko.observable(true),
-
 	query: ko.observable(''),
-
-	places: ko.observableArray(),
-
-	pusher: function(){
-		for(i = 0; i < markers.length; i++){
-			// console.log("locations are " + locationData.name);
-			// console.log(viewModel.locations());
-
-			// Here is where you should push individual markers into locData, although it may not really be necessary because that may be redundant
-			console.log(markers[i].title);
-
-		};
-	},
 
 	// Makes markers bounce when clicked or activated
 	toggleBounce: function(m) {
@@ -92,10 +77,31 @@ var viewModel = {
 		} else {
 			m.setAnimation(google.maps.Animation.BOUNCE);
 		};
+
 		// Limits how long a marker will bounce for when clicked or activated
 		setTimeout(function(){
 			m.setAnimation(null);
 		}, 1400)
+	},
+
+	// Grabs wikipedia info through an ajax request
+	infoFetcher: function(currentMarker){
+		var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + currentMarker.title + '&format=json';
+
+		// Ajax request
+		var ajax = $.ajax({
+			url: wikiUrl,
+			dataType: "jsonp",
+			headers: { 'Api-User-Agent': 'Example/1.0' }
+		}).done(function(response) {
+			var respLength = response.length;
+			var respTitle = response[0];
+			var respSumm = response[2];
+			var wikiLinks = response[3];
+
+			// Appends wikipedia sourced info to the infowindow via the model and each locations infoContent key
+			$(".wikiStuff").append("<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>");
+		});
 	},
 
 	// Creates markers and adds click listener
@@ -113,47 +119,52 @@ var viewModel = {
 				bouncy: function() {
 					viewModel.toggleBounce(this);
 				},
+				openy: function() {
+					if(!infowindow) {
+						infowindow = new google.maps.InfoWindow({});
+					};
+					viewModel.infoFetcher(this);
+					infowindow.setContent(this.info);
+					infowindow.open(map, this);
+				},
 			});
 
+			// Event listener for when the user clicks on a marker
 			google.maps.event.addListener(markers[i], 'click', function () {
+
+				// toggles bounce animation
 				viewModel.toggleBounce(this);
 
+				// toggles infowindow open an closed
 				if(!infowindow) {
-						infowindow = new google.maps.InfoWindow({
-					});
+						infowindow = new google.maps.InfoWindow({});
 				};
 				infowindow.setContent(this.info);
 				infowindow.open(map, this);
 
-				var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + this.title + '&format=json';
-
+				// Function helps turn off subheader when a marker is clicked
 				truthy();
 
-				var ajax = $.ajax({
-					url: wikiUrl,
-					dataType: "jsonp",
-					headers: { 'Api-User-Agent': 'Example/1.0' }
-				}).done(function(response) {
-					var respLength = response.length;
-					var respTitle = response[0];
-					var respSumm = response[2];
-					var wikiLinks = response[3];
-					/* Appends wikipedia sourced info to the infowindow via the model and each locations infoContent key */
-					$(".wikiStuff").append("<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>");
-				});
+				// Calls infofetcher to grab wikipedia info through an ajax request
+				viewModel.infoFetcher(this);
 			});
 		};
 	},
 
 	// Search function for text input box
 	search: function(value) {
+
+		// Removes map markers and location list entries before checking for matches among data
 		for (var i = 0; i < markers.length; i++) {
 			markers[i].setMap(null);
+			locArray[i].visibility(false);
 		};
 
+		// Adds markers back in if search box data matches with a location
 		for(var x in markers) {
 			if(markers[x].title.toLowerCase().indexOf(value.toLowerCase()) >= 0) {
 			markers[x].setMap(map);
+			locArray[x].visibility(true);
 			};
 		};
 
@@ -181,13 +192,18 @@ var viewModel = {
 
 		var id = self.markerID;
 
+		// Clears current sub header info when subheader is present and user clicks another subheader
 		if($("#listClicked") != null) {
 			viewModel.subheaderClear();
 		};
 
 		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>");
+
 		// Starts the toggleBounce function located within each marker object
 		markers[id].bouncy();
+
+		// Opens infowindow on list click
+		markers[id].openy();
 
 		viewModel.isSubHeaderVisible(true);
 	}
@@ -206,9 +222,8 @@ var view = {
 				mapTypeControl: false
 		});
 
+		// Initiates creation of markers
 		viewModel.markerMaker();
-
-		viewModel.pusher();
 	},
 
 	// Error message
@@ -219,11 +234,18 @@ var view = {
 };
 
 window.onerror = function () {
+	// Error message for general errors taking place within the window
 	alert("Neighborhood Map Helper encountered an error and could not load. Please check your internet connection or submit a bug report");
 };
 
 $(document).ready(function() {
+	// Subscribes query function to value of search bar
 	viewModel.query.subscribe(viewModel.search);
 
+	// Applies knockout bindings
 	ko.applyBindings(viewModel);
 });
+
+/* Neighborhood Map Project by Ledwing Hernandez -- ledwinghernandez.com -- github.com/waka867 */
+
+/* Marker infowindow content provided by Wikipedia and is property of Wikipedia -- Map content provided by Google and is proerty of Google */

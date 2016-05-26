@@ -17,18 +17,18 @@
 				<h2>Location Filter:</h2>
 				<input placeholder="Type here" id="address" type="text" size="35" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset" size="35">reset map</button>
 			</form>
-			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul> <!--NOTE: Duplicate for testing       -->
+			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul>
 			<h3 id="listClicked" data-bind="{click: viewModel.subheaderClear, visible: viewModel.isSubHeaderVisible}"></h3>
 		</div>
 	</div>
 
-	<div id="bottomBar">Udacity Web Project by | <a href="http://www.ledwinghernandez.com">Ledwing Hernandez</a></div>
+	<div id="bottomBar">Udacity Web Project by <a href="http://www.ledwinghernandez.com">Ledwing Hernandez</a> | Map data provided by <a href="http://www.google.com">Google</a> | Marker info provided by <a href="http://www.wikipedia.com">Wikipedia</a></div>
 
 	<script type="text/html" id="locationList">
 		<li>
-			<strong data-bind="{text: name, visible: viewModel.locVis, click: viewModel.listClick}"></strong>
+			<strong data-bind="{text: name, visible: visibility, click: viewModel.listClick}"></strong>
 		</li>
 	</script>
-	<script async="true" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script> <!-- TODO make sure the map script tag is loaded async -->
+	<script async="true" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>
 </body>
 </html>
