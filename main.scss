@@ -18,6 +18,9 @@ body {
 	@media screen and (max-width: 737px) {
 		font-size: 1.4em;
 	};
+	@media screen and (max-width: 500px) {
+		font-size: 1.6em;
+	};
 	text-align: center;
 	z-index: 1;
 }
