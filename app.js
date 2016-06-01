@@ -79,34 +79,42 @@ var viewModel = {
 		};
 
 		// Limits how long a marker will bounce for when clicked or activated
-		setTimeout(function(){
+		setTimeout(function() {
 			m.setAnimation(null);
 		}, 1400)
 	},
 
 	// Grabs wikipedia info through an ajax request
-	infoFetcher: function(currentMarker){
+	infoFetcher: function(currentMarker) {
 		var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + currentMarker.title + '&format=json';
 
 		// Ajax request
 		var ajax = $.ajax({
 			url: wikiUrl,
 			dataType: "jsonp",
-			headers: { 'Api-User-Agent': 'Example/1.0' }
+			headers: { 'Api-User-Agent': 'Example/1.0' },
+			error: function(){
+				alert("An information request error occurred. Please try again or check the error logs and console for more details");
+			}
 		}).done(function(response) {
 			var respLength = response.length;
 			var respTitle = response[0];
 			var respSumm = response[2];
 			var wikiLinks = response[3];
 
-			// Appends wikipedia sourced info to the infowindow via the model and each locations infoContent key
-			$(".wikiStuff").append("<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>");
+			// Prepares wikipedia sourced info for the infowindow via the model and each locations infoContent key
+			var wContent = "<h3>" + respTitle + "</h3><p>" + respSumm[0] + "</p><p><a href=" + wikiLinks[0] + " target='_blank'>Learn more about " + respTitle + " here</a></p>";
+
+			// Sets infowindow content
+			infowindow.setContent(wContent);
 		});
 	},
 
 	// Creates markers and adds click listener
-	markerMaker: function(){
-		for(i = 0; i < locArray.length; i++ ) {
+	markerMaker: function() {
+		var ln = locArray.length;
+
+		for(i = 0; i < ln; i++ ) {
 			markers[i] = new google.maps.Marker({
 				position: locArray[i].position,
 				map: map,
@@ -124,7 +132,6 @@ var viewModel = {
 						infowindow = new google.maps.InfoWindow({});
 					};
 					viewModel.infoFetcher(this);
-					infowindow.setContent(this.info);
 					infowindow.open(map, this);
 				},
 			});
@@ -132,21 +139,24 @@ var viewModel = {
 			// Event listener for when the user clicks on a marker
 			google.maps.event.addListener(markers[i], 'click', function () {
 
-				// toggles bounce animation
+				// Toggles bounce animation
 				viewModel.toggleBounce(this);
 
-				// toggles infowindow open an closed
+				// Pans to current marker
+				map.panTo(this.position);
+
+				// Calls infofetcher to grab wikipedia info through an ajax request
+				viewModel.infoFetcher(this);
+
+				// Toggles infowindow open and closed
 				if(!infowindow) {
 						infowindow = new google.maps.InfoWindow({});
 				};
-				infowindow.setContent(this.info);
+
 				infowindow.open(map, this);
 
 				// Function helps turn off subheader when a marker is clicked
 				truthy();
-
-				// Calls infofetcher to grab wikipedia info through an ajax request
-				viewModel.infoFetcher(this);
 			});
 		};
 	},
@@ -193,11 +203,11 @@ var viewModel = {
 		var id = self.markerID;
 
 		// Clears current sub header info when subheader is present and user clicks another subheader
-		if($("#listClicked") != null) {
+		if($("#list-clicked") != null) {
 			viewModel.subheaderClear();
 		};
 
-		$("#listClicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>" + "<sub>click here to close</sub>");
+		$("#list-clicked").html("<h3>" + markers[id].title + " - " + markers[id].address + "</h3>" + "<sub>click here to close</sub>");
 
 		// Starts the toggleBounce function located within each marker object
 		markers[id].bouncy();
@@ -223,6 +233,12 @@ var view = {
 
 		// Initiates creation of markers
 		viewModel.markerMaker();
+
+		// Subscribes query function to value of search bar
+		viewModel.query.subscribe(viewModel.search);
+
+		// Applies knockout bindings
+		ko.applyBindings(viewModel);
 	},
 
 	// Error message
@@ -231,19 +247,6 @@ var view = {
 		alert("Google Maps service encountered a problem and could not load");
 	}
 };
-
-window.onerror = function () {
-	// Error message for general errors taking place within the window
-	alert("Neighborhood Map Helper encountered an error and could not load. Please check your internet connection or submit a bug report");
-};
-
-$(document).ready(function() {
-	// Subscribes query function to value of search bar
-	viewModel.query.subscribe(viewModel.search);
-
-	// Applies knockout bindings
-	ko.applyBindings(viewModel);
-});
 
 /* Neighborhood Map Project by Ledwing Hernandez -- ledwinghernandez.com -- github.com/waka867 */
 

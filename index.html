@@ -1,32 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Neighborhood Map - Udacity Project #5</title>
-	<link rel="stylesheet" type="text/css" href="main.css">
-	<script type="text/javascript" src="knockout-3.4.0.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-	<script type="text/javascript" src="app.js"></script>
+	<link rel="stylesheet" href="main.css">
 </head>
 <body>
 	<h1 id="page-title">NYC Neighborhood Map Helper</h1>
-	<div id="map">
-		<div class="main-container">
+	<main id="map">
+		<section class="main-container">
 			<form id="form-container">
-				<label>Location Filter</label><input placeholder="Type here" id="address" type="text" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset">reset map</button>
+				<label for="address">Location Filter</label><input placeholder="Type here" id="address" type="text" name="searchbar" data-bind="value: viewModel.query, valueUpdate: 'keyup'" autocomplete="off"></input><button data-bind="viewModel.listReset">reset map</button>
 			</form>
-			<ul id="lister" data-bind="template: {name: 'locationList', foreach: model.locations}"></ul>
-			<h3 id="listClicked" data-bind="{click: viewModel.subheaderClear, visible: viewModel.isSubHeaderVisible}"></h3>
-		</div>
-	</div>
+			<ul id="lister" data-bind="template: {name: 'locationlist', foreach: model.locations}"></ul>
+			<h3 id="list-clicked" data-bind="{click: viewModel.subheaderClear, visible: viewModel.isSubHeaderVisible}"></h3>
+		</section>
+	</main>
 
-	<div id="bottomBar">Udacity Web Project by <a href="http://www.ledwinghernandez.com">Ledwing Hernandez</a> | Map data provided by <a href="http://www.google.com">Google</a> | Marker info provided by <a href="http://www.wikipedia.com">Wikipedia</a></div>
+	<footer id="bottom-bar">Udacity Web Project by <a href="http://www.ledwinghernandez.com" target="_blank">Ledwing Hernandez</a> | Map data provided by <a href="http://www.google.com" target="_blank">Google</a> | Marker info provided by <a href="http://www.wikipedia.com" target="_blank">Wikipedia</a></footer>
 
-	<script type="text/html" id="locationList">
+	<script type="text/html" id="locationlist">
 		<li>
 			<strong data-bind="{text: name, visible: visibility, click: viewModel.listClick}"></strong>
 		</li>
 	</script>
-	<script async="true" type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>
+	<script src="knockout-3.4.0.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
+	<script src="app.js"></script>
+	<script async="true" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>
 </body>
 </html>
