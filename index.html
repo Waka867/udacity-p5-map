@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Neighborhood Map - Udacity Project #5</title>
-	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
 	<h1 id="page-title">NYC Neighborhood Map Helper</h1>
@@ -25,9 +25,9 @@
 			<strong data-bind="{text: name, visible: visibility, click: viewModel.listClick}"></strong>
 		</li>
 	</script>
-	<script src="knockout-3.4.0.js"></script>
+	<script src="js/knockout-3.4.0.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-	<script src="app.js"></script>
+	<script src="js/app.js"></script>
 	<script async="true" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBk1lO9a-jKHIAPJLO0IG0vJ6cnwEkV5cQ&callback=view.viewStarter" onerror="view.GMerrorhandler()"></script>
 </body>
 </html>

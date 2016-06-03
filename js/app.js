@@ -4,6 +4,18 @@ var markers = [];
 // Defines infowindow for later value assignment
 var infowindow;
 
+// Timeout function to be used for ajax jsonp error handling
+function apiTimeout() {
+	apiTimeout = setTimeout(function(){
+		alert("Error: Wikipedia data request could not be completed");
+	}, 2000);
+};
+
+// To be used to cleear ajax error handler if no problems slow ajax to the threshold of the timeout
+function clearTimer() {
+	clearTimeout(apiTimeout);
+};
+
 /* -------------------------- App data model below ------------------------------ */
 var model = {
 	locations: [
@@ -107,6 +119,9 @@ var viewModel = {
 
 			// Sets infowindow content
 			infowindow.setContent(wContent);
+
+			// Clears ajax failure alert which is set on a timeout to trigger
+			clearTimer();
 		});
 	},
 
@@ -138,6 +153,9 @@ var viewModel = {
 
 			// Event listener for when the user clicks on a marker
 			google.maps.event.addListener(markers[i], 'click', function () {
+
+				// Activates api timeout so that a failed ajax request in infoFetcher fails gracefully
+				apiTimeout();
 
 				// Toggles bounce animation
 				viewModel.toggleBounce(this);
